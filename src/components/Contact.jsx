@@ -21,6 +21,7 @@ function PineTreeSmall({ color = '#243B30', opacity = 1 }) {
 export default function Contact() {
   return (
     <section
+      id="stop-contact"
       style={{
         background: '#F7F8FA',
         padding: '112px 0 0',
@@ -55,7 +56,7 @@ export default function Contact() {
                 display: 'inline',
               }}
             >
-              Let's make something.
+              Base Camp
             </h2>
           </span>
         </motion.div>
@@ -74,7 +75,7 @@ export default function Contact() {
             lineHeight: 1.6,
           }}
         >
-          Open to design projects, collaborations, and good coffee.
+          Let's make something together. Open to design projects, collaborations, and good coffee.
         </motion.p>
 
         {/* Email button */}

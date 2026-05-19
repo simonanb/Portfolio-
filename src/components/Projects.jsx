@@ -47,6 +47,7 @@ export default function Projects() {
 
   return (
     <section
+      id="stop-projects"
       style={{
         background: '#F7F8FA',
         padding: '96px 0 112px',
@@ -73,8 +74,20 @@ export default function Projects() {
               position: 'relative',
             }}
           >
-            Work
+            Terrain Park
           </h2>
+          <p
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: 11,
+              color: 'rgba(26,26,42,0.45)',
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              marginTop: 10,
+            }}
+          >
+            some things I've built
+          </p>
           {/* SVG underline that draws on scroll */}
           <div style={{ marginTop: 6 }}>
             <svg

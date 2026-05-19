@@ -1,20 +1,12 @@
-import { useEffect, useRef } from 'react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { motion } from 'framer-motion'
 
-const SKILLS = [
-  'Figma', 'UI Design', 'UX Research', 'Prototyping',
-  'Next.js', 'Tailwind CSS', 'Framer Motion', 'Branding',
-]
-
 const INTERESTS = [
-  { icon: '🏔', label: 'Snowboarding' },
-  { icon: '🎨', label: 'Air dry clay' },
-  { icon: '💻', label: 'UI/UX Design' },
+  { icon: '🏔', label: 'Snowboarding', desc: 'Finding flow on fresh powder' },
+  { icon: '🎨', label: 'Air dry clay', desc: 'Sculpting tiny worlds' },
+  { icon: '💻', label: 'UI/UX Design', desc: 'Making the digital feel human' },
 ]
 
-function PineTreeSilhouette({ height = 160, color = '#243B30', opacity = 1 }) {
+function PineTree({ height, color, opacity }) {
   const w = height * 0.38
   return (
     <svg
@@ -22,7 +14,6 @@ function PineTreeSilhouette({ height = 160, color = '#243B30', opacity = 1 }) {
       height={height}
       viewBox="0 0 38 160"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg"
       style={{ display: 'block', opacity }}
     >
       <polygon points="19,4 0,55 8,55 8,70 30,70 30,55 38,55" fill={color} />
@@ -35,31 +26,12 @@ function PineTreeSilhouette({ height = 160, color = '#243B30', opacity = 1 }) {
 }
 
 export default function About() {
-  const pillsRef = useRef(null)
-
-  useEffect(() => {
-    if (!pillsRef.current) return
-    const pills = pillsRef.current.querySelectorAll('.skill-pill')
-
-    gsap.from(pills, {
-      y: 18,
-      opacity: 0,
-      scale: 0.82,
-      stagger: 0.055,
-      duration: 0.5,
-      ease: 'back.out(1.7)',
-      scrollTrigger: {
-        trigger: pillsRef.current,
-        start: 'top 78%',
-        once: true,
-      },
-    })
-
-    return () => ScrollTrigger.getAll().forEach(t => t.kill())
-  }, [])
+  const leftTrees  = [0.65, 0.82, 1.0, 0.88, 0.72]
+  const rightTrees = [0.72, 0.88, 1.0, 0.82, 0.65]
 
   return (
     <section
+      id="stop-about"
       style={{
         background: '#F0F4F7',
         padding: '100px 0 112px',
@@ -80,12 +52,12 @@ export default function About() {
           pointerEvents: 'none',
         }}
       >
-        {[0.7, 0.85, 1.0, 0.9, 0.75].map((scale, i) => (
-          <PineTreeSilhouette
+        {leftTrees.map((scale, i) => (
+          <PineTree
             key={i}
-            height={160 * scale}
+            height={170 * scale}
             color="#243B30"
-            opacity={0.12 + i * 0.03}
+            opacity={0.11 + i * 0.025}
           />
         ))}
       </div>
@@ -103,12 +75,12 @@ export default function About() {
           pointerEvents: 'none',
         }}
       >
-        {[0.75, 0.9, 1.0, 0.85, 0.7].map((scale, i) => (
-          <PineTreeSilhouette
+        {rightTrees.map((scale, i) => (
+          <PineTree
             key={i}
-            height={160 * scale}
+            height={170 * scale}
             color="#243B30"
-            opacity={0.15 - i * 0.02}
+            opacity={0.14 - i * 0.02}
           />
         ))}
       </div>
@@ -125,14 +97,14 @@ export default function About() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 420px), 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 400px), 1fr))',
             gap: 64,
             alignItems: 'start',
           }}
         >
-          {/* ── Left column ── */}
+          {/* ── Left: Bio ── */}
           <motion.div
-            initial={{ opacity: 0, x: -32 }}
+            initial={{ opacity: 0, x: -28 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-40px' }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
@@ -140,24 +112,24 @@ export default function About() {
             <h2
               style={{
                 fontFamily: 'Fraunces, serif',
-                fontSize: 'clamp(30px, 4vw, 40px)',
+                fontSize: 'clamp(32px, 4.5vw, 48px)',
                 fontWeight: 700,
                 color: '#1A1A2A',
                 letterSpacing: '-0.02em',
+                lineHeight: 1.0,
                 marginBottom: 24,
               }}
             >
-              About me
+              About Me
             </h2>
 
             <p
               style={{
                 fontFamily: 'Inter, sans-serif',
                 fontSize: 15,
-                lineHeight: 1.75,
-                color: 'rgba(26,26,42,0.68)',
-                marginBottom: 36,
-                maxWidth: 440,
+                lineHeight: 1.78,
+                color: 'rgba(26,26,42,0.65)',
+                maxWidth: 420,
               }}
             >
               I'm Simona, a UI/UX designer from Macedonia. I care about
@@ -166,96 +138,75 @@ export default function About() {
               powder.
             </p>
 
-            {/* Interest cards */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {INTERESTS.map(({ icon, label }, i) => (
-                <motion.div
-                  key={label}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{
-                    duration: 0.55,
-                    delay: 0.1 + i * 0.1,
-                    ease: [0.16, 1, 0.3, 1],
-                  }}
-                >
-                  <div className="interest-card">
-                    <span style={{ fontSize: 20 }}>{icon}</span>
-                    <span
-                      style={{
-                        fontFamily: 'Inter, sans-serif',
-                        fontSize: 14,
-                        fontWeight: 500,
-                        color: '#1A1A2A',
-                      }}
-                    >
-                      {label}
-                    </span>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* ── Right column ── */}
-          <motion.div
-            initial={{ opacity: 0, x: 32 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
-            transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <h2
-              style={{
-                fontFamily: 'Fraunces, serif',
-                fontSize: 'clamp(30px, 4vw, 40px)',
-                fontWeight: 700,
-                color: '#1A1A2A',
-                letterSpacing: '-0.02em',
-                marginBottom: 28,
-              }}
-            >
-              Skills
-            </h2>
-
-            <div
-              ref={pillsRef}
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: 10,
-              }}
-            >
-              {SKILLS.map(skill => (
-                <span key={skill} className="skill-pill">
-                  {skill}
-                </span>
-              ))}
-            </div>
-
-            {/* Decorative accent line */}
+            {/* Decorative line */}
             <div
               style={{
-                marginTop: 40,
+                marginTop: 32,
                 height: 1,
-                background: 'linear-gradient(90deg, #4A9EBF, transparent)',
-                opacity: 0.25,
+                width: 48,
+                background: '#4A9EBF',
+                opacity: 0.4,
                 borderRadius: 1,
               }}
             />
 
             <p
               style={{
-                marginTop: 28,
+                marginTop: 20,
                 fontFamily: 'Inter, sans-serif',
                 fontSize: 13,
                 color: 'rgba(26,26,42,0.4)',
-                lineHeight: 1.6,
                 fontStyle: 'italic',
               }}
             >
-              Based in Macedonia · Available for freelance projects
+              Based in Macedonia · Available for freelance
             </p>
+          </motion.div>
+
+          {/* ── Right: Interest Cards ── */}
+          <motion.div
+            initial={{ opacity: 0, x: 28 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              {INTERESTS.map(({ icon, label, desc }, i) => (
+                <motion.div
+                  key={label}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{
+                    duration: 0.55,
+                    delay: 0.15 + i * 0.1,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                >
+                  <div className="interest-card">
+                    <span style={{ fontSize: 22, lineHeight: 1 }}>{icon}</span>
+                    <div>
+                      <div style={{
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: 14,
+                        fontWeight: 600,
+                        color: '#1A1A2A',
+                        marginBottom: 2,
+                      }}>
+                        {label}
+                      </div>
+                      <div style={{
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: 12,
+                        color: 'rgba(26,26,42,0.42)',
+                      }}>
+                        {desc}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </div>
       </div>

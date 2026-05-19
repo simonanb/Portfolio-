@@ -1,7 +1,10 @@
 import Cursor from './components/Cursor'
+import AltitudeTracker from './components/AltitudeTracker'
 import Hero from './components/Hero'
-import Projects from './components/Projects'
 import About from './components/About'
+import Projects from './components/Projects'
+import Skills from './components/Skills'
+import Experience from './components/Experience'
 import Contact from './components/Contact'
 
 export default function App() {
@@ -26,9 +29,24 @@ export default function App() {
       </svg>
 
       <Cursor />
+      <AltitudeTracker />
+
+      {/* Stop 1 — Summit */}
       <Hero />
-      <Projects />
+
+      {/* Stop 2 — About Me Cabin */}
       <About />
+
+      {/* Stop 3 — Terrain Park */}
+      <Projects />
+
+      {/* Stop 4 — Forest Ride */}
+      <Skills />
+
+      {/* Stop 5 — Lodge Village */}
+      <Experience />
+
+      {/* Stop 6 — Base Camp */}
       <Contact />
     </>
   )

@@ -15,11 +15,13 @@ const PATH_WAYPOINTS = [
   { x: 50, y: 97 },
 ]
 
+// Altitude stages only used for the snowboarder tilt logic now
+// The persistent AltitudeTracker handles section labels globally
 const ALTITUDE_STAGES = [
-  { min: 0,    label: 'Peak',        altitude: '2 400 m', icon: '▲' },
-  { min: 0.25, label: 'Mid Slope',   altitude: '1 800 m', icon: '▲' },
-  { min: 0.5,  label: 'Lower Slope', altitude: '1 200 m', icon: '▲' },
-  { min: 0.75, label: 'Base Lodge',  altitude: '  900 m', icon: '▲' },
+  { min: 0,    icon: '▲' },
+  { min: 0.25, icon: '▲' },
+  { min: 0.5,  icon: '▲' },
+  { min: 0.75, icon: '▲' },
 ]
 
 function lerp(a, b, t) {
@@ -56,7 +58,7 @@ export default function Hero() {
   const boarderRef    = useRef(null)
   const linesRef      = useRef(null)
   const lastProg      = useRef(0)
-  const [stage, setStage]   = useState(ALTITUDE_STAGES[0])
+  const [stage, setStage] = useState(ALTITUDE_STAGES[0])
   const [isMobile, setMobile] = useState(() => window.innerWidth < 768)
 
   useEffect(() => {
@@ -146,6 +148,7 @@ export default function Hero() {
 
   return (
     <section
+      id="stop-hero"
       ref={heroRef}
       style={{
         position: 'relative',
@@ -369,30 +372,7 @@ export default function Hero() {
       {/* ── Snow particles (both mobile and desktop) ── */}
       <Snow />
 
-      {/* ── Altitude Label (desktop) ── */}
-      {!isMobile && (
-        <div
-          className="altitude-label"
-          style={{
-            position: 'absolute',
-            top: 32,
-            right: 36,
-            textAlign: 'right',
-            pointerEvents: 'none',
-            userSelect: 'none',
-          }}
-        >
-          <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(26,26,42,0.45)', marginBottom: 3 }}>
-            altitude
-          </div>
-          <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 12, fontWeight: 500, color: 'rgba(26,26,42,0.6)', marginBottom: 2 }}>
-            {stage.label}
-          </div>
-          <div style={{ fontFamily: 'Inter, sans-serif', fontSize: 18, fontWeight: 600, color: '#1A1A2A', letterSpacing: '-0.02em' }}>
-            {stage.icon} {stage.altitude}
-          </div>
-        </div>
-      )}
+      {/* Altitude label handled globally by AltitudeTracker */}
 
       {/* ── Hero Text ── */}
       <motion.div
@@ -469,13 +449,13 @@ export default function Hero() {
         <span
           style={{
             fontFamily: 'Inter, sans-serif',
-            fontSize: 10,
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
-            color: 'rgba(26,26,42,0.4)',
+            fontSize: 11,
+            letterSpacing: '0.06em',
+            color: 'rgba(26,26,42,0.45)',
+            fontWeight: 400,
           }}
         >
-          Scroll
+          drop in
         </span>
         <div
           className="scroll-bounce"
