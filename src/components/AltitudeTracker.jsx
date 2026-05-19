@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 const STOPS = [
-  { id: 'stop-hero',       label: 'Summit',              alt: '2 400 m' },
-  { id: 'stop-about',      label: 'About Me Cabin',      alt: '1 900 m' },
-  { id: 'stop-projects',   label: 'Terrain Park',        alt: '1 600 m' },
-  { id: 'stop-skills',     label: 'Forest Ride',         alt: '1 300 m' },
-  { id: 'stop-experience', label: 'Lodge Village',       alt: '1 000 m' },
-  { id: 'stop-contact',    label: 'Base Camp',           alt: '  850 m' },
+  { min: 0,    label: 'Summit',          alt: '2 400 m' },
+  { min: 0.16, label: 'About Me Cabin',  alt: '1 900 m' },
+  { min: 0.33, label: 'Terrain Park',    alt: '1 600 m' },
+  { min: 0.50, label: 'Forest Ride',     alt: '1 300 m' },
+  { min: 0.66, label: 'Lodge Village',   alt: '1 000 m' },
+  { min: 0.83, label: 'Base Camp',       alt: '  850 m' },
 ]
 
 function MtnIcon() {
@@ -24,15 +24,10 @@ export default function AltitudeTracker() {
 
   useEffect(() => {
     const onScroll = () => {
-      const mid = window.scrollY + window.innerHeight * 0.42
-      for (let i = STOPS.length - 1; i >= 0; i--) {
-        const el = document.getElementById(STOPS[i].id)
-        if (el && el.offsetTop <= mid) {
-          setCurrent(STOPS[i])
-          return
-        }
-      }
-      setCurrent(STOPS[0])
+      const maxScroll = document.body.scrollHeight - window.innerHeight
+      const progress  = maxScroll > 0 ? window.scrollY / maxScroll : 0
+      const active    = [...STOPS].reverse().find(s => progress >= s.min) || STOPS[0]
+      setCurrent(prev => prev.label === active.label ? prev : active)
     }
 
     onScroll()
@@ -46,7 +41,7 @@ export default function AltitudeTracker() {
         position: 'fixed',
         top: 20,
         right: 20,
-        zIndex: 8000,
+        zIndex: 9000,
         background: 'rgba(255,255,255,0.92)',
         backdropFilter: 'blur(10px)',
         WebkitBackdropFilter: 'blur(10px)',
