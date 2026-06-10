@@ -1,216 +1,163 @@
 @import "tailwindcss";
 
-@theme {
-  --color-bg: #F7F8FA;
-  --color-text: #1A1A2A;
-  --color-accent: #4A9EBF;
-  --color-secondary: #A8C0D4;
-  --color-sky: #C8D8E8;
-  --color-pine: #2A4035;
-  --font-display: 'Fraunces', serif;
-  --font-sans: 'Inter', sans-serif;
+@font-face {
+  font-family: 'Novella';
+  src: url('/src/assets/fonts/Novella-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
 }
 
-*, *::before, *::after {
-  box-sizing: border-box;
+:root {
+  --bg: #C8D8E8;
+  --page-bg: #F7F8FA;
+  --text: #1A1A2A;
+  --accent: #4A9EBF;
+  --warm: #E8632A;
+  --clay: #C4956A;
+  --muted: #7A8A9A;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
   margin: 0;
   padding: 0;
-}
-
-html {
-  scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   font-family: 'Inter', sans-serif;
-  background-color: #F7F8FA;
-  color: #1A1A2A;
-  overflow-x: hidden;
-  cursor: none;
+  color: var(--text);
+  background: var(--page-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-@media (hover: none) {
-  body { cursor: auto; }
-  .custom-cursor { display: none; }
-}
-
-/* ── Custom Cursor ── */
-.custom-cursor {
-  position: fixed;
-  top: -6px;
-  left: -6px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  border: 1.5px solid #4A9EBF;
-  pointer-events: none;
-  z-index: 9999;
-  will-change: transform;
-}
-
-/* ── Grain Overlay ── */
-.grain-overlay {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 9990;
-  opacity: 0.035;
-}
-
-/* ── Snow Particles ── */
-.snow-container {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 2;
-}
-
-.snowflake {
-  position: absolute;
-  top: -8px;
-  border-radius: 50%;
-  animation: snowfall linear infinite;
-}
-
+/* ── Snowfall ── */
 @keyframes snowfall {
   0% {
-    transform: translateY(-8px) translateX(0px);
+    transform: translateY(-12px) translateX(0px);
     opacity: 0;
   }
-  8% { opacity: 1; }
-  88% { opacity: 0.8; }
+  6% { opacity: 0.9; }
+  90% { opacity: 0.6; }
   100% {
-    transform: translateY(105vh) translateX(22px);
+    transform: translateY(105vh) translateX(28px);
     opacity: 0;
   }
 }
 
-/* ── Project Cards ── */
-.project-card {
+/* ── Target float ── */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-9px); }
+}
+
+/* ── Cloud drift ── */
+@keyframes cloudDrift {
+  from { transform: translateX(-260px); }
+  to   { transform: translateX(calc(100vw + 260px)); }
+}
+
+/* ── Target hit shake ── */
+@keyframes targetShake {
+  0%   { transform: translateX(0) rotate(0deg); }
+  18%  { transform: translateX(-7px) rotate(-4deg); }
+  36%  { transform: translateX(7px) rotate(4deg); }
+  54%  { transform: translateX(-4px) rotate(-2deg); }
+  72%  { transform: translateX(4px) rotate(2deg); }
+  90%  { transform: translateX(-1px) rotate(-0.5deg); }
+  100% { transform: translateX(0) rotate(0deg); }
+}
+
+/* ── Page enter ── */
+@keyframes pageEnter {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.page-enter {
+  animation: pageEnter 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ── Game scene cursor ── */
+.game-scene {
+  cursor: crosshair;
+}
+
+/* ── Snowball projectile (created by JS) ── */
+.snowball-proj {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
   background: white;
-  border: 1px solid #E0E8F0;
-  border-radius: 16px;
-  padding: 32px;
-  cursor: none;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.35s ease;
-  position: relative;
-  overflow: hidden;
+  border: 1px solid #CCDDE8;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  z-index: 50;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.13);
 }
 
-.project-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 24px 48px rgba(74, 158, 191, 0.10);
-  border-color: #4A9EBF;
+/* ── Utility classes ── */
+.tag-pill {
+  display: inline-block;
+  background: #EBF5FA;
+  color: #185FA5;
+  font-size: 9px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
 }
 
-.project-card .view-link {
+.skill-pill {
+  display: inline-block;
+  background: white;
+  border: 1px solid #4A9EBF;
+  color: #4A9EBF;
+  font-size: 12px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: var(--muted);
+  padding: 4px 0;
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #4A9EBF;
-  margin-top: 16px;
-  transform: translateX(-16px);
-  opacity: 0;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.35s ease;
+  transition: color 0.2s;
+  text-decoration: none;
 }
+.back-btn:hover { color: var(--text); text-decoration: underline; }
 
-.project-card:hover .view-link {
-  transform: translateX(0);
-  opacity: 1;
-}
-
-/* ── Skill Pills ── */
-.skill-pill {
-  display: inline-flex;
-  align-items: center;
-  padding: 6px 16px;
-  border: 1px solid #4A9EBF;
-  border-radius: 100px;
-  color: #4A9EBF;
-  font-size: 13px;
-  font-weight: 500;
-  font-family: 'Inter', sans-serif;
-  background: white;
-  transition: background 0.2s ease, color 0.2s ease;
-  cursor: none;
-}
-
-.skill-pill:hover {
-  background: #4A9EBF;
-  color: white;
-}
-
-/* ── Contact Heading Underline ── */
-.contact-heading-wrapper {
-  position: relative;
-  display: inline-block;
-  cursor: none;
-}
-
-.contact-heading-wrapper::after {
-  content: '';
-  position: absolute;
-  bottom: -6px;
-  left: 0;
-  width: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #4A9EBF, #A8C0D4);
-  border-radius: 2px;
-  transition: width 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.contact-heading-wrapper:hover::after {
+.img-placeholder {
   width: 100%;
-}
-
-/* ── Interest Cards ── */
-.interest-card {
-  background: white;
-  border: 1px solid #E0E8F0;
+  background: #E8EDF3;
   border-radius: 12px;
-  padding: 14px 18px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 14px;
-  font-weight: 500;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
-}
-
-.interest-card:hover {
-  border-color: #A8C0D4;
-  box-shadow: 0 4px 20px rgba(74, 158, 191, 0.08);
-}
-
-/* ── Scroll Bounce ── */
-@keyframes bounce-arrow {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(8px); }
-}
-
-.scroll-bounce {
-  animation: bounce-arrow 1.8s ease-in-out infinite;
-}
-
-/* ── Altitude Label Transition ── */
-.altitude-label {
-  transition: opacity 0.4s ease;
-}
-
-@media (max-width: 767px) {
-  .mountain-layers,
-  .snowboarder-wrap,
-  .slope-path-wrap {
-    display: none !important;
-  }
+  justify-content: center;
+  color: #9AAAB8;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  flex-direction: column;
+  gap: 6px;
 }

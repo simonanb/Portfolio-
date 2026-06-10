@@ -66,7 +66,7 @@ export default function Experience() {
         >
           <h2
             style={{
-              fontFamily: 'Fraunces, serif',
+              fontFamily: 'Novella, DM Sans, sans-serif',
               fontSize: 'clamp(34px, 5vw, 48px)',
               fontWeight: 700,
               color: '#1A1A2A',
@@ -155,7 +155,7 @@ export default function Experience() {
                   >
                     <h3
                       style={{
-                        fontFamily: 'Fraunces, serif',
+                        fontFamily: 'Novella, DM Sans, sans-serif',
                         fontSize: 22,
                         fontWeight: 600,
                         color: '#1A1A2A',

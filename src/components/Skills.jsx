@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 
 const SKILLS = [
   'Figma', 'UI Design', 'UX Research', 'Prototyping',
-  'Next.js', 'Tailwind CSS', 'Framer Motion', 'Branding',
+  'Branding', 'Adobe Photoshop', 'Adobe InDesign', 'Adobe Illustrator',
 ]
 
 function DenseTree({ height, color, opacity }) {
@@ -129,7 +129,7 @@ export default function Skills() {
         >
           <h2
             style={{
-              fontFamily: 'Fraunces, serif',
+              fontFamily: 'Novella, DM Sans, sans-serif',
               fontSize: 'clamp(34px, 5vw, 48px)',
               fontWeight: 700,
               color: '#1A1A2A',
@@ -179,7 +179,7 @@ export default function Skills() {
           transition={{ duration: 0.7, delay: 0.5 }}
           style={{
             marginTop: 52,
-            fontFamily: 'Fraunces, serif',
+            fontFamily: 'Novella, DM Sans, sans-serif',
             fontSize: 18,
             fontStyle: 'italic',
             fontWeight: 400,

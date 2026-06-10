@@ -47,7 +47,7 @@ export default function Contact() {
           <span className="contact-heading-wrapper">
             <h2
               style={{
-                fontFamily: 'Fraunces, serif',
+                fontFamily: 'Novella, DM Sans, sans-serif',
                 fontSize: 'clamp(40px, 7vw, 64px)',
                 fontWeight: 700,
                 color: '#1A1A2A',
