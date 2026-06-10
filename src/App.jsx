@@ -6,7 +6,7 @@ import AboutPage from './pages/AboutPage'
 
 export default function App() {
   return (
-    <BrowserRouter basename="/portfolio">
+    <BrowserRouter basename="/Portfolio-">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/ux" element={<CategoryPage category="ux" />} />
