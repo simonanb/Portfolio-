@@ -19,6 +19,7 @@ const CATEGORY_LABELS = {
 }
 
 const pick = arr => arr[Math.floor(Math.random() * arr.length)]
+const AVATAR_MSGS  = ["I'm calling my lawyer", 'WHO DID THAT?!', 'Excuse me?!']
 const MISS_MSGS    = ['The wind got that one 💨', 'Almost! 🌨️', 'Slippery aim ❄️', 'So close! 🤏', 'Missed! Try again ⛄']
 const HIT1_MSGS    = ['Nice shot! ❄️', 'Direct hit! ⛄', 'Got one! 🎯', 'Bullseye! ✨']
 const HIT2_MSGS    = ['Two in a row! 🔥', 'Getting warmer! 🎿', 'Sharp aim! ✨']
@@ -36,6 +37,7 @@ export default function Home() {
   const targetRefs          = useRef({})
   const avatarRef           = useRef(null)
   const consecutiveHitsRef  = useRef(0)
+  const avatarHitCountRef   = useRef(0)
   const hitTargetsRef       = useRef(new Set())
   const isBlizzardRef       = useRef(false)
 
@@ -122,7 +124,7 @@ export default function Home() {
   }, [navigate])
 
   /* ── Handle impact (sounds + combo messages) ── */
-  const handleImpact = useCallback((nearest, ex, ey) => {
+  const handleImpact = useCallback((nearest, ex, ey, hitAvatar = false) => {
     if (nearest) {
       createShatter(nearest.cx, nearest.cy)
       const isCardTarget = nearest.id !== 'about'
@@ -143,7 +145,7 @@ export default function Home() {
       createShatter(ex, ey)
       splatSound()
       consecutiveHitsRef.current = 0
-      showMsg(pick(MISS_MSGS))
+      if (!hitAvatar) showMsg(pick(MISS_MSGS))
     }
   }, [createShatter, hitSound, splatSound, victorySound, handleHit, showMsg])
 
@@ -184,20 +186,24 @@ export default function Home() {
       },
       onComplete() {
         sb.remove()
-        // Avatar hit check
+        let hitAvatar = false
         if (avatarRef.current && sceneRef.current) {
           const sr = sceneRef.current.getBoundingClientRect()
           const ar = avatarRef.current.getBoundingClientRect()
           const acx = ar.left + ar.width  / 2 - sr.left
           const acy = ar.top  + ar.height / 2 - sr.top
           if (Math.hypot(ex - acx, ey - acy) < 62) {
+            hitAvatar = true
             setAvatarFallKey(k => k + 1)
+            const idx = avatarHitCountRef.current % AVATAR_MSGS.length
+            showMsg(AVATAR_MSGS[idx])
+            avatarHitCountRef.current += 1
           }
         }
-        handleImpact(nearest, ex, ey)
+        handleImpact(nearest, ex, ey, hitAvatar)
       },
     })
-  }, [throwSound, handleImpact])
+  }, [throwSound, handleImpact, showMsg])
 
   /* ── Scene click → find nearest target & launch ── */
   const handleSceneClick = useCallback((e) => {

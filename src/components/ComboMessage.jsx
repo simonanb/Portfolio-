@@ -22,7 +22,7 @@ export default function ComboMessage({ text, msgKey }) {
   return (
     <div style={{
       position: 'absolute',
-      top: '36%',
+      top: '68%',
       left: '50%',
       transform: 'translateX(-50%)',
       zIndex: 40,
