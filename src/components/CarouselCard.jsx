@@ -112,6 +112,65 @@ export default function CarouselCard({
           </div>
         </div>
 
+        {/* Image Thumbnail */}
+        <div
+          key={project.slug}
+          className="project-image-in"
+          style={{
+            height: 138,
+            position: 'relative',
+            overflow: 'hidden',
+            borderBottom: `1px solid ${accentColor}1A`,
+          }}
+        >
+          {project.image ? (
+            <img
+              src={project.image}
+              alt={project.name}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            />
+          ) : (
+            <div style={{
+              width: '100%', height: '100%',
+              background: `linear-gradient(140deg, ${accentColor}0D 0%, ${accentColor}22 60%, ${accentColor}18 100%)`,
+              position: 'relative',
+              overflow: 'hidden',
+            }}>
+              {/* Decorative blobs */}
+              <div style={{
+                position: 'absolute', top: -28, right: -28,
+                width: 130, height: 130, borderRadius: '50%',
+                background: `${accentColor}18`,
+              }} />
+              <div style={{
+                position: 'absolute', bottom: -22, left: 14,
+                width: 88, height: 88, borderRadius: '50%',
+                background: `${accentColor}12`,
+              }} />
+              <div style={{
+                position: 'absolute', top: 22, left: -16,
+                width: 56, height: 56, borderRadius: '50%',
+                background: `${accentColor}0E`,
+              }} />
+              {/* Category watermark */}
+              <div style={{
+                position: 'absolute', inset: 0,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <span style={{
+                  fontFamily: 'Novella, DM Sans, sans-serif',
+                  fontSize: 48, fontWeight: 400, lineHeight: 1,
+                  color: `${accentColor}22`,
+                  letterSpacing: '-0.02em',
+                  userSelect: 'none',
+                }}>
+                  {project.name.replace(/\s+/g, '').charAt(0)}
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+
         {/* Body */}
         <div style={{ padding: '13px 14px 10px' }}>
           <h3 style={{

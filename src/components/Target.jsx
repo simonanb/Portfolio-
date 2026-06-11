@@ -2,7 +2,7 @@ import { forwardRef } from 'react'
 
 const FLOAT_DELAY = { ux: '0s', graphic: '1.1s', about: '1.75s' }
 
-const Target = forwardRef(({ id, label, x, y, isHit, accentColor }, ref) => {
+const Target = forwardRef(({ id, label, x, y, isHit, accentColor, isBlizzard }, ref) => {
   const delay = FLOAT_DELAY[id] || '0s'
 
   return (
@@ -26,7 +26,9 @@ const Target = forwardRef(({ id, label, x, y, isHit, accentColor }, ref) => {
           alignItems: 'center',
           animation: isHit
             ? 'targetShake 0.42s ease forwards'
-            : `float 3.2s ease-in-out ${delay} infinite`,
+            : isBlizzard
+              ? `floatBlizzard 2.0s ease-in-out ${delay} infinite`
+              : `float 3.2s ease-in-out ${delay} infinite`,
         }}
       >
         {/* Bubble */}

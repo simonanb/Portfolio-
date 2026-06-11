@@ -1,9 +1,13 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import gsap from 'gsap'
 import Scene from '../components/Scene'
 import Target from '../components/Target'
 import CarouselCard from '../components/CarouselCard'
+import ComboMessage from '../components/ComboMessage'
+import WeatherToggle from '../components/WeatherToggle'
+import { useSounds } from '../hooks/useSounds'
+import { useWeather } from '../hooks/useWeather'
 import { targetData, projects } from '../data/projects'
 
 const AMMO = 8
@@ -14,20 +18,43 @@ const CATEGORY_LABELS = {
   clay: 'Clay Work',
 }
 
+const pick = arr => arr[Math.floor(Math.random() * arr.length)]
+const MISS_MSGS    = ['The wind got that one 💨', 'Almost! 🌨️', 'Slippery aim ❄️', 'So close! 🤏', 'Missed! Try again ⛄']
+const HIT1_MSGS    = ['Nice shot! ❄️', 'Direct hit! ⛄', 'Got one! 🎯', 'Bullseye! ✨']
+const HIT2_MSGS    = ['Two in a row! 🔥', 'Getting warmer! 🎿', 'Sharp aim! ✨']
+const HIT3_MSGS    = ['Hat trick! 🏆', 'On fire! 🔥', 'Unstoppable! 🏂']
+const VICTORY_MSGS = ['All targets hit! 🎉', 'Portfolio unlocked! ✨', 'Perfect aim! 🏔️']
+
 export default function Home() {
   const [hitTargets, setHitTargets] = useState(new Set())
   const [activeCards, setActiveCards] = useState({})
   const [ammoUsed, setAmmoUsed] = useState(0)
-  const sceneRef   = useRef(null)
-  const targetRefs = useRef({})
-  const navigate   = useNavigate()
+  const [comboMsg, setComboMsg] = useState({ text: '', key: 0 })
+  const [avatarFallKey, setAvatarFallKey] = useState(0)
+
+  const sceneRef            = useRef(null)
+  const targetRefs          = useRef({})
+  const avatarRef           = useRef(null)
+  const consecutiveHitsRef  = useRef(0)
+  const hitTargetsRef       = useRef(new Set())
+  const isBlizzardRef       = useRef(false)
+
+  const navigate = useNavigate()
+  const { throwSound, hitSound, splatSound, victorySound, thunderSound, getCtx } = useSounds()
+  const { isBlizzard, toggle: toggleWeather } = useWeather(getCtx)
+
+  useEffect(() => { hitTargetsRef.current  = hitTargets  }, [hitTargets])
+  useEffect(() => { isBlizzardRef.current  = isBlizzard  }, [isBlizzard])
+
+  const showMsg = useCallback((text) => {
+    setComboMsg(prev => ({ text, key: prev.key + 1 }))
+  }, [])
 
   /* ── Snowball shatter on impact ── */
   const createShatter = useCallback((cx, cy) => {
     const scene = sceneRef.current
     if (!scene) return
 
-    // expanding ring flash
     const ring = document.createElement('div')
     ring.style.cssText = `position:absolute;border-radius:50%;border:2px solid rgba(255,255,255,0.9);pointer-events:none;z-index:62;left:0;top:0;`
     scene.appendChild(ring)
@@ -38,30 +65,24 @@ export default function Home() {
       onComplete: () => ring.remove(),
     })
 
-    // irregular snow chunks
     const CHUNKS = 13
     for (let i = 0; i < CHUNKS; i++) {
-      const angle   = (i / CHUNKS) * Math.PI * 2 + (Math.random() - 0.5) * 0.7
-      const speed   = 35 + Math.random() * 55
-      const w       = 4 + Math.random() * 9
-      const h       = Math.random() > 0.45 ? w : w * (0.5 + Math.random() * 0.8)
-      const radius  = Math.random() > 0.4 ? '50%' : `${2 + Math.random() * 3}px`
-      const color   = Math.random() > 0.25 ? 'rgba(255,255,255,0.97)' : 'rgba(200,225,240,0.92)'
+      const angle    = (i / CHUNKS) * Math.PI * 2 + (Math.random() - 0.5) * 0.7
+      const speed    = 35 + Math.random() * 55
+      const w        = 4 + Math.random() * 9
+      const h        = Math.random() > 0.45 ? w : w * (0.5 + Math.random() * 0.8)
+      const radius   = Math.random() > 0.4 ? '50%' : `${2 + Math.random() * 3}px`
+      const color    = Math.random() > 0.25 ? 'rgba(255,255,255,0.97)' : 'rgba(200,225,240,0.92)'
       const duration = 0.38 + Math.random() * 0.32
-
-      const chunk = document.createElement('div')
+      const chunk    = document.createElement('div')
       chunk.style.cssText = `position:absolute;width:${w}px;height:${h}px;border-radius:${radius};background:${color};left:0;top:0;pointer-events:none;z-index:61;`
       scene.appendChild(chunk)
       gsap.set(chunk, { x: cx - w / 2, y: cy - h / 2, rotation: Math.random() * 360 })
-
-      // arc upward chunks fall back down; outward chunks just drift
       const vx = Math.cos(angle) * speed
       const vy = Math.sin(angle) * speed
-      const gravity = vy < 0 ? Math.abs(vy) * 1.4 : 18
-
       gsap.to(chunk, {
         x: cx - w / 2 + vx,
-        y: cy - h / 2 + vy + gravity,
+        y: cy - h / 2 + vy + (vy < 0 ? Math.abs(vy) * 1.4 : 18),
         rotation: `+=${(Math.random() - 0.5) * 480}`,
         opacity: 0,
         scale: 0.15 + Math.random() * 0.35,
@@ -71,7 +92,6 @@ export default function Home() {
       })
     }
 
-    // fine snow dust
     for (let i = 0; i < 8; i++) {
       const angle = Math.random() * Math.PI * 2
       const dist  = 8 + Math.random() * 20
@@ -101,13 +121,47 @@ export default function Home() {
     setActiveCards(prev => ({ ...prev, [targetId]: true }))
   }, [navigate])
 
+  /* ── Handle impact (sounds + combo messages) ── */
+  const handleImpact = useCallback((nearest, ex, ey) => {
+    if (nearest) {
+      createShatter(nearest.cx, nearest.cy)
+      const isCardTarget = nearest.id !== 'about'
+      const willBeVictory = isCardTarget && (hitTargetsRef.current.size + 1) >= 2
+      if (willBeVictory) {
+        victorySound()
+        showMsg(pick(VICTORY_MSGS))
+      } else {
+        hitSound()
+        consecutiveHitsRef.current += 1
+        const c = consecutiveHitsRef.current
+        if (c >= 3)     showMsg(pick(HIT3_MSGS))
+        else if (c >= 2) showMsg(pick(HIT2_MSGS))
+        else             showMsg(pick(HIT1_MSGS))
+      }
+      handleHit(nearest.id)
+    } else {
+      createShatter(ex, ey)
+      splatSound()
+      consecutiveHitsRef.current = 0
+      showMsg(pick(MISS_MSGS))
+    }
+  }, [createShatter, hitSound, splatSound, victorySound, handleHit, showMsg])
+
   /* ── Launch snowball with parabolic arc ── */
   const launchSnowball = useCallback((sx, sy, nearest) => {
     const scene = sceneRef.current
     if (!scene) return
 
-    const ex = nearest ? nearest.cx : sx + (Math.random() * 220 - 110)
-    const ey = nearest ? nearest.cy : Math.min(scene.clientHeight * 0.84, sy + 60 + Math.random() * 80)
+    throwSound()
+
+    const windDrift = isBlizzardRef.current ? (Math.random() - 0.5) * 60 : 0
+    const ex = nearest
+      ? nearest.cx + windDrift
+      : sx + (Math.random() * 220 - 110) + windDrift
+    const ey = nearest
+      ? nearest.cy
+      : Math.min(scene.clientHeight * 0.84, sy + 60 + Math.random() * 80)
+
     const dist     = Math.hypot(ex - sx, ey - sy)
     const duration = Math.max(0.28, Math.min(0.72, dist / 650))
     const arcH     = Math.min(dist * 0.28, 78)
@@ -123,22 +177,27 @@ export default function Home() {
       duration,
       ease: 'none',
       onUpdate() {
-        const t  = obj.t
-        const x  = sx + (ex - sx) * t
-        const y  = sy + (ey - sy) * t - arcH * 4 * t * (1 - t)
+        const t = obj.t
+        const x = sx + (ex - sx) * t
+        const y = sy + (ey - sy) * t - arcH * 4 * t * (1 - t)
         sb.style.transform = `translate(${x - 7}px, ${y - 7}px)`
       },
       onComplete() {
         sb.remove()
-        if (nearest) {
-          createShatter(nearest.cx, nearest.cy)
-          handleHit(nearest.id)
-        } else {
-          createShatter(ex, ey)
+        // Avatar hit check
+        if (avatarRef.current && sceneRef.current) {
+          const sr = sceneRef.current.getBoundingClientRect()
+          const ar = avatarRef.current.getBoundingClientRect()
+          const acx = ar.left + ar.width  / 2 - sr.left
+          const acy = ar.top  + ar.height / 2 - sr.top
+          if (Math.hypot(ex - acx, ey - acy) < 62) {
+            setAvatarFallKey(k => k + 1)
+          }
         }
+        handleImpact(nearest, ex, ey)
       },
     })
-  }, [createShatter, handleHit])
+  }, [throwSound, handleImpact])
 
   /* ── Scene click → find nearest target & launch ── */
   const handleSceneClick = useCallback((e) => {
@@ -158,13 +217,17 @@ export default function Home() {
       if (hitTargets.has(target.id)) return
       const el = targetRefs.current[target.id]
       if (!el) return
-      const er    = el.getBoundingClientRect()
-      const tcx   = er.left + er.width  / 2 - rect.left
-      const tcy   = er.top  + er.height / 2 - rect.top
-      const d     = Math.hypot(cx - tcx, cy - tcy)
-      if (d < 220 && d < nearestDist) {
-        nearestDist = d
-        nearest = { id: target.id, cx: tcx, cy: tcy }
+      const er  = el.getBoundingClientRect()
+      const tcx = er.left + er.width  / 2 - rect.left
+      const tcy = er.top  + er.height / 2 - rect.top
+      // Only lock on if the click lands directly within the target element
+      if (e.clientX >= er.left && e.clientX <= er.right &&
+          e.clientY >= er.top  && e.clientY <= er.bottom) {
+        const d = Math.hypot(cx - tcx, cy - tcy)
+        if (d < nearestDist) {
+          nearestDist = d
+          nearest = { id: target.id, cx: tcx, cy: tcy }
+        }
       }
     })
 
@@ -184,11 +247,14 @@ export default function Home() {
     <div
       ref={sceneRef}
       className="game-scene"
-      style={{ position: 'relative', width: '100%', height: '100svh', overflow: 'hidden', userSelect: 'none', background: '#C8D8E8' }}
+      style={{ position: 'relative', width: '100%', height: '100svh', overflow: 'hidden', userSelect: 'none', background: isBlizzard ? '#8AAABB' : '#C8D8E8', transition: 'background 0.8s ease' }}
       onClick={handleSceneClick}
     >
       {/* Background layers */}
-      <Scene />
+      <Scene isBlizzard={isBlizzard} onThunder={thunderSound} avatarRef={avatarRef} avatarFallKey={avatarFallKey} />
+
+      {/* ── Weather toggle (top-left) ── */}
+      <WeatherToggle isBlizzard={isBlizzard} onToggle={toggleWeather} />
 
       {/* ── Name overlay (top-center) ── */}
       <div style={{
@@ -224,7 +290,10 @@ export default function Home() {
         </p>
       </div>
 
-      {/* ── Score pill (bottom-right, above ammo) ── */}
+      {/* ── Combo / miss message ── */}
+      <ComboMessage text={comboMsg.text} msgKey={comboMsg.key} />
+
+      {/* ── Score pill (bottom-right) ── */}
       <div style={{ position: 'absolute', bottom: 72, right: 24, zIndex: 30, pointerEvents: 'none' }}>
         <div style={{
           background: 'rgba(255,255,255,0.80)',
@@ -249,6 +318,7 @@ export default function Home() {
           y={t.y}
           isHit={hitTargets.has(t.id)}
           accentColor={t.accentColor}
+          isBlizzard={isBlizzard}
         />
       ))}
 
@@ -287,8 +357,8 @@ export default function Home() {
               border: i < ammoUsed
                 ? '1px solid rgba(255,255,255,0.14)'
                 : '1px solid rgba(180,210,232,0.65)',
-              opacity:    i < ammoUsed ? 0.25 : 1,
-              boxShadow:  i < ammoUsed ? 'none' : '0 1px 5px rgba(0,0,0,0.09)',
+              opacity:   i < ammoUsed ? 0.25 : 1,
+              boxShadow: i < ammoUsed ? 'none' : '0 1px 5px rgba(0,0,0,0.09)',
               transition: 'all 0.3s ease',
             }} />
           ))}

@@ -7,6 +7,7 @@ export const projects = {
       tags: ['UI Design', 'UX Research', 'Next.js', 'Supabase'],
       color: '#4A9EBF',
       category: 'UX Design',
+      image: null,
       fullDesc:
         'A community-driven platform enabling Macedonians to donate items, share resources, and connect with those in need — completely free of charge.',
     },
@@ -17,6 +18,7 @@ export const projects = {
       tags: ['UI Design', 'UX Research', 'Product Design', 'Figma'],
       color: '#4A9EBF',
       category: 'UX Design',
+      image: null,
       fullDesc:
         'A SaaS platform streamlining orthodontic case management with intuitive patient tracking, treatment planning, and clinical workflow tools.',
     },
@@ -27,6 +29,7 @@ export const projects = {
       tags: ['Creative Dev', 'GSAP', 'React', 'Vite'],
       color: '#4A9EBF',
       category: 'UX Design',
+      image: null,
       fullDesc:
         'An interactive portfolio where visitors throw snowballs at targets to discover projects. Built with React, GSAP physics, and a very specific sense of humour.',
     },
@@ -39,6 +42,7 @@ export const projects = {
       tags: ['Branding', 'Typography', 'Print', 'Identity'],
       color: '#E8632A',
       category: 'Graphic Design',
+      image: null,
       fullDesc:
         'A complete visual identity system for Ritual Café — a specialty coffee concept built around the idea of slowness, ritual, and sensory presence.',
     },
@@ -49,6 +53,7 @@ export const projects = {
       tags: ['Graphic Design'],
       color: '#E8632A',
       category: 'Graphic Design',
+      image: null,
       fullDesc: 'Something new is in the works. Check back soon.',
     },
   ],
@@ -60,6 +65,7 @@ export const projects = {
       tags: ['Handmade', 'Sculpture', 'Air Dry Clay'],
       color: '#C4956A',
       category: 'Clay Work',
+      image: null,
       fullDesc:
         'A collection of handmade air dry clay sculptures exploring organic forms, human figures, and everyday objects.',
     },
@@ -92,8 +98,8 @@ export const targetData = [
   {
     id: 'about',
     label: 'About Me',
-    x: 47,
-    y: 40,
+    x: 54,
+    y: 44,
     category: null,
     route: '/about',
     accentColor: '#4A9EBF',

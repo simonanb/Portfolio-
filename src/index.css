@@ -59,6 +59,48 @@ body {
   to   { transform: translateX(calc(100vw + 260px)); }
 }
 
+/* ── Carousel card image fade-in on project change ── */
+@keyframes projectImageIn {
+  from { opacity: 0; transform: scale(1.03); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.project-image-in {
+  animation: projectImageIn 0.28s ease both;
+}
+
+/* ── Avatar drift — follows the slope downhill ── */
+@keyframes avatarDrift {
+  from { transform: translateX(-160px) translateY(-32px); }
+  to   { transform: translateX(calc(100vw + 160px)) translateY(48px); }
+}
+
+/* ── Lightning sky flash ── */
+@keyframes lightningFlash {
+  0%   { opacity: 0; }
+  6%   { opacity: 0.88; }
+  20%  { opacity: 0.32; }
+  30%  { opacity: 0.92; }
+  58%  { opacity: 0.06; }
+  100% { opacity: 0; }
+}
+
+/* ── Blizzard snowfall (faster, diagonal) ── */
+@keyframes blizzardFall {
+  0%   { transform: translateY(-12px) translateX(0px); opacity: 0; }
+  5%   { opacity: 0.85; }
+  90%  { opacity: 0.7; }
+  100% { transform: translateY(105vh) translateX(70px); opacity: 0; }
+}
+
+/* ── Blizzard target float (swaying) ── */
+@keyframes floatBlizzard {
+  0%   { transform: translateY(0px)   translateX(0px); }
+  20%  { transform: translateY(-12px) translateX(-5px); }
+  50%  { transform: translateY(-18px) translateX(5px); }
+  75%  { transform: translateY(-8px)  translateX(-3px); }
+  100% { transform: translateY(0px)   translateX(0px); }
+}
+
 /* ── Target hit shake ── */
 @keyframes targetShake {
   0%   { transform: translateX(0) rotate(0deg); }

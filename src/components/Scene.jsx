@@ -1,5 +1,8 @@
-import avatarSvg from '../assets/avatar-02.svg'
+import { useState, useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import avatarSvg    from '../assets/avatar-02.svg'
 import illustrationSvg from '../assets/new ilustration-04.svg'
+import gondolaSvg   from '../assets/gondola-02.svg'
 
 const SNOWFLAKES = Array.from({ length: 20 }, (_, i) => ({
   id: i,
@@ -50,22 +53,23 @@ const CLOUDS = [
   { top: 22,  duration: 48, delay: -44, scale: 0.52, opacity: 0.62 },
 ]
 
-function Cloud({ top, duration, delay, scale, opacity }) {
+function Cloud({ top, duration, delay, scale, opacity, isBlizzard }) {
+  const d = isBlizzard ? Math.round(duration * 0.38) : duration
   return (
     <div
       aria-hidden="true"
       style={{
         position: 'absolute', top: `${top}px`, left: 0,
         pointerEvents: 'none', zIndex: 2, opacity,
-        animation: `cloudDrift ${duration}s linear ${delay}s infinite`,
+        animation: `cloudDrift ${d}s linear ${delay}s infinite`,
       }}
     >
       <svg
         viewBox="0 0 430.09 311.42"
         width={Math.round(380 * scale)}
         height={Math.round(275 * scale)}
-        fill="#DDEEF6"
-        style={{ display: 'block' }}
+        fill={isBlizzard ? '#7A9AAE' : '#DDEEF6'}
+        style={{ transition: 'fill 0.8s ease', display: 'block' }}
       >
         {CLOUD_PATHS.map((d, i) => <path key={i} d={d} />)}
       </svg>
@@ -73,9 +77,30 @@ function Cloud({ top, duration, delay, scale, opacity }) {
   )
 }
 
-function Avatar() {
+function Avatar({ isBlizzard, fallKey, outerRef }) {
+  const innerRef = useRef(null)
+  const tlRef    = useRef(null)
+  const duration = isBlizzard ? 13 : 26
+  const tilt     = isBlizzard ? 13 : 8
+
+  useEffect(() => {
+    if (!fallKey || !outerRef?.current || !innerRef.current) return
+    const outer = outerRef.current
+    const inner = innerRef.current
+    if (tlRef.current) tlRef.current.kill()
+    gsap.set(inner, { rotation: 0, y: 0 })
+    outer.style.animationPlayState = 'paused'
+    tlRef.current = gsap.timeline({
+      onComplete: () => { outer.style.animationPlayState = 'running' },
+    })
+      .to(inner, { rotation: -75, y: 22, duration: 0.25, ease: 'power3.in' })
+      .to(inner, { duration: 2.4 })
+      .to(inner, { rotation: 0, y: 0, duration: 0.6, ease: 'back.out(1.5)' })
+  }, [fallKey, outerRef])
+
   return (
     <div
+      ref={outerRef}
       aria-hidden="true"
       style={{
         position: 'absolute',
@@ -83,19 +108,40 @@ function Avatar() {
         left: 0,
         pointerEvents: 'none',
         zIndex: 5,
-        animation: 'cloudDrift 26s linear -8s infinite',
+        animation: `avatarDrift ${duration}s linear -8s infinite`,
       }}
     >
-      {/* Tilt forward to match the downhill slope angle */}
-      <div style={{ transform: 'rotate(8deg)', transformOrigin: 'center bottom' }}>
-        <img
-          src={avatarSvg}
-          width="72"
-          height="90"
-          alt=""
-          style={{ display: 'block' }}
-        />
+      {/* Static slope tilt — React-controlled */}
+      <div style={{ transform: `rotate(${tilt}deg)`, transformOrigin: 'center bottom', transition: 'transform 0.6s ease' }}>
+        {/* Fall/rise — GSAP-controlled */}
+        <div ref={innerRef} style={{ transformOrigin: 'center bottom' }}>
+          <img src={avatarSvg} width="72" height="90" alt="" style={{ display: 'block' }} />
+        </div>
       </div>
+    </div>
+  )
+}
+
+function Gondola() {
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        position: 'absolute',
+        left: '8%',
+        top: '40%',
+        zIndex: 3,
+        pointerEvents: 'none',
+        animation: 'float 5s ease-in-out 0.8s infinite',
+      }}
+    >
+      {/* Gondola car */}
+      <img
+        src={gondolaSvg}
+        width="130"
+        alt=""
+        style={{ display: 'block' }}
+      />
     </div>
   )
 }
@@ -155,7 +201,25 @@ const MTN_D = [
   `M179.72,174.46c1.98-4.86,4.13-10.41,7.55-14.36-1.68,4.86-4.23,10.37-7.55,14.36Z`,
 ]
 
-export default function Scene() {
+export default function Scene({ isBlizzard = false, onThunder, avatarRef, avatarFallKey = 0 }) {
+  const [flashCount, setFlashCount] = useState(0)
+  const timerRef = useRef(null)
+
+  useEffect(() => {
+    const clear = () => { if (timerRef.current) clearTimeout(timerRef.current) }
+    if (!isBlizzard) { clear(); return }
+
+    const schedule = (delay) => {
+      timerRef.current = setTimeout(() => {
+        setFlashCount(c => c + 1)
+        if (onThunder) setTimeout(onThunder, 140)
+        schedule(3500 + Math.random() * 5500)
+      }, delay)
+    }
+    schedule(600 + Math.random() * 800)
+    return clear
+  }, [isBlizzard, onThunder])
+
   return (
     <>
       {/* Sky gradient */}
@@ -163,11 +227,14 @@ export default function Scene() {
         aria-hidden="true"
         style={{
           position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none',
-          background: 'linear-gradient(to bottom, #C8DCE8 0%, #E8F4F8 100%)',
+          background: isBlizzard
+            ? 'linear-gradient(to bottom, #8AAABB 0%, #B4C8D4 100%)'
+            : 'linear-gradient(to bottom, #C8DCE8 0%, #E8F4F8 100%)',
+          transition: 'background 0.8s ease',
         }}
       />
 
-      {/* Sun glow — radial light from upper-right corner */}
+      {/* Sun glow — hidden in blizzard */}
       <div
         aria-hidden="true"
         style={{
@@ -180,6 +247,8 @@ export default function Scene() {
           background: 'radial-gradient(ellipse at top right, rgba(255,228,120,0.32) 0%, rgba(255,210,80,0.10) 40%, transparent 70%)',
           zIndex: 1,
           pointerEvents: 'none',
+          opacity: isBlizzard ? 0 : 1,
+          transition: 'opacity 0.8s ease',
         }}
       />
 
@@ -200,6 +269,9 @@ export default function Scene() {
           pointerEvents: 'none',
         }}
       />
+
+      {/* Gondola */}
+      <Gondola />
 
       {/* Snow ground — downhill slope, high-left to low-right */}
       <svg
@@ -229,13 +301,48 @@ export default function Scene() {
       </svg>
 
       {/* Clouds */}
-      {CLOUDS.map((c, i) => <Cloud key={i} {...c} />)}
+      {CLOUDS.map((c, i) => <Cloud key={i} {...c} isBlizzard={isBlizzard} />)}
 
       {/* Avatar walking on snow */}
-      <Avatar />
+      <Avatar isBlizzard={isBlizzard} fallKey={avatarFallKey} outerRef={avatarRef} />
+
+      {/* Blizzard vignette */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute', inset: 0, zIndex: 3, pointerEvents: 'none',
+          background: 'radial-gradient(ellipse at center, transparent 35%, rgba(140,185,218,0.42) 100%)',
+          opacity: isBlizzard ? 1 : 0,
+          transition: 'opacity 0.6s ease',
+        }}
+      />
+
+      {/* Lightning flash */}
+      {isBlizzard && flashCount > 0 && (
+        <div
+          key={flashCount}
+          aria-hidden="true"
+          style={{
+            position: 'absolute', inset: 0, zIndex: 9, pointerEvents: 'none',
+            background: 'rgba(235, 245, 255, 0.88)',
+            animation: 'lightningFlash 0.38s ease-out forwards',
+          }}
+        />
+      )}
 
       {/* Snow particles */}
-      {SNOWFLAKES.map(f => (
+      {(isBlizzard
+        ? Array.from({ length: 40 }, (_, i) => ({
+            id: `b${i}`,
+            left: (i * 2.5 + 1) % 100,
+            size: 2 + (i % 4) * 0.85,
+            duration: 1.4 + (i % 4) * 0.55,
+            delay: (i * 0.14) % 4,
+            opacity: 0.68 + (i % 3) * 0.12,
+            anim: 'blizzardFall',
+          }))
+        : SNOWFLAKES.map(f => ({ ...f, anim: 'snowfall' }))
+      ).map(f => (
         <div
           key={f.id}
           aria-hidden="true"
@@ -247,7 +354,7 @@ export default function Scene() {
             height: `${f.size}px`,
             borderRadius: '50%',
             background: 'white',
-            animation: `snowfall ${f.duration}s linear ${f.delay}s infinite`,
+            animation: `${f.anim} ${f.duration}s linear ${f.delay}s infinite`,
             opacity: f.opacity,
             pointerEvents: 'none',
             zIndex: 4,
