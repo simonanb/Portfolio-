@@ -56,6 +56,7 @@ const CLOUDS = [
 function Cloud({ top, duration, delay, scale, opacity, isBlizzard }) {
   const d = isBlizzard ? Math.round(duration * 0.38) : duration
   return (
+    <div className="parallax-far scene-cloud" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 2 }}>
     <div
       aria-hidden="true"
       style={{
@@ -74,8 +75,19 @@ function Cloud({ top, duration, delay, scale, opacity, isBlizzard }) {
         {CLOUD_PATHS.map((d, i) => <path key={i} d={d} />)}
       </svg>
     </div>
+    </div>
   )
 }
+
+// Snow spray particles: drift up-left behind the board
+const SPRAY = [
+  { s: 5, dx: -22, dy: -14, d: 0 },
+  { s: 4, dx: -30, dy: -6,  d: 0.15 },
+  { s: 6, dx: -18, dy: -22, d: 0.3 },
+  { s: 3, dx: -34, dy: -16, d: 0.45 },
+  { s: 5, dx: -26, dy: -2,  d: 0.6 },
+  { s: 4, dx: -14, dy: -10, d: 0.75 },
+]
 
 function Avatar({ isBlizzard, fallKey, outerRef }) {
   const innerRef = useRef(null)
@@ -101,6 +113,7 @@ function Avatar({ isBlizzard, fallKey, outerRef }) {
   return (
     <div
       ref={outerRef}
+      className="scene-avatar"
       aria-hidden="true"
       style={{
         position: 'absolute',
@@ -114,22 +127,48 @@ function Avatar({ isBlizzard, fallKey, outerRef }) {
       {/* Static slope tilt — React-controlled */}
       <div style={{ transform: `rotate(${tilt}deg)`, transformOrigin: 'center bottom', transition: 'transform 0.6s ease' }}>
         {/* Fall/rise — GSAP-controlled */}
-        <div ref={innerRef} style={{ transformOrigin: 'center bottom' }}>
-          <img src={avatarSvg} width="72" height="90" alt="" style={{ display: 'block' }} />
+        <div ref={innerRef} style={{ transformOrigin: 'center bottom', position: 'relative' }}>
+          {/* S-curve carving */}
+          <div className="rider-carve" style={{ position: 'relative' }}>
+            {/* Cast shadow: the rider flattened onto the snow from the board line, slanting away from the sun */}
+            <div aria-hidden="true" style={{
+              position: 'absolute', left: 0, top: 0, width: 96, height: 120, pointerEvents: 'none',
+              transformOrigin: '50% 106px', transform: 'scaleY(-0.32) skewX(48deg)',
+            }}>
+              <img className="rider-shadow" src={avatarSvg} width="96" height="120" alt="" style={{
+                display: 'block', filter: 'brightness(0) blur(1.5px)', opacity: 0.16, transformOrigin: '50% 106px',
+              }} />
+            </div>
+            {/* Occasional jump */}
+            <div className="rider-jump" style={{ position: 'relative' }}>
+              {/* Snow spray behind the board tail */}
+              <div style={{ position: 'absolute', left: 8, bottom: 14, width: 1, height: 1 }}>
+                {SPRAY.map((p, i) => (
+                  <span key={i} className="spray-puff" style={{
+                    width: p.s, height: p.s, left: 0, top: 0,
+                    '--dx': `${p.dx}px`, '--dy': `${p.dy}px`,
+                    animationDelay: `${p.d}s`, animationDuration: `${isBlizzard ? 0.6 : 0.9}s`,
+                  }} />
+                ))}
+              </div>
+              <img src={avatarSvg} width="96" height="120" alt="" style={{ display: 'block', position: 'relative' }} />
+            </div>
+          </div>
         </div>
       </div>
     </div>
   )
 }
 
-function Gondola() {
+function Gondola({ isMobile }) {
   return (
+    <div className="parallax-mid scene-gondola" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 3 }}>
     <div
       aria-hidden="true"
       style={{
         position: 'absolute',
-        left: '8%',
-        top: '40%',
+        left: isMobile ? '4%' : '8%',
+        top: isMobile ? '47%' : '40%',
         zIndex: 3,
         pointerEvents: 'none',
         animation: 'float 5s ease-in-out 0.8s infinite',
@@ -138,10 +177,11 @@ function Gondola() {
       {/* Gondola car */}
       <img
         src={gondolaSvg}
-        width="130"
+        width={isMobile ? 84 : 130}
         alt=""
         style={{ display: 'block' }}
       />
+    </div>
     </div>
   )
 }
@@ -201,7 +241,7 @@ const MTN_D = [
   `M179.72,174.46c1.98-4.86,4.13-10.41,7.55-14.36-1.68,4.86-4.23,10.37-7.55,14.36Z`,
 ]
 
-export default function Scene({ isBlizzard = false, onThunder, avatarRef, avatarFallKey = 0 }) {
+export default function Scene({ isBlizzard = false, onThunder, avatarRef, avatarFallKey = 0, isMobile = false }) {
   const [flashCount, setFlashCount] = useState(0)
   const timerRef = useRef(null)
 
@@ -252,26 +292,28 @@ export default function Scene({ isBlizzard = false, onThunder, avatarRef, avatar
         }}
       />
 
-      {/* New illustration — lower 55%, sits above snow base */}
-      <img
-        src={illustrationSvg}
-        aria-hidden="true"
-        alt=""
-        style={{
-          position: 'absolute',
-          bottom: '10%',
-          left: 0,
-          width: '100%',
-          height: '72%',
-          objectFit: 'contain',
-          objectPosition: 'bottom center',
-          zIndex: 1,
-          pointerEvents: 'none',
-        }}
-      />
+      {/* Illustration — on phones it fills the width (sides cropped) so the mountain stays big */}
+      <div className="parallax-mid" style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none' }}>
+        <img
+          className="scene-illus"
+          src={illustrationSvg}
+          aria-hidden="true"
+          alt=""
+          style={{
+            position: 'absolute',
+            bottom: isMobile ? '9%' : '10%',
+            left: 0,
+            width: '100%',
+            height: isMobile ? '46%' : '72%',
+            objectFit: isMobile ? 'cover' : 'contain',
+            objectPosition: isMobile ? '58% bottom' : 'bottom center',
+            pointerEvents: 'none',
+          }}
+        />
+      </div>
 
       {/* Gondola */}
-      <Gondola />
+      <Gondola isMobile={isMobile} />
 
       {/* Snow ground — downhill slope, high-left to low-right */}
       <svg
@@ -303,7 +345,7 @@ export default function Scene({ isBlizzard = false, onThunder, avatarRef, avatar
       {/* Clouds */}
       {CLOUDS.map((c, i) => <Cloud key={i} {...c} isBlizzard={isBlizzard} />)}
 
-      {/* Avatar walking on snow */}
+      {/* Avatar riding on snow */}
       <Avatar isBlizzard={isBlizzard} fallKey={avatarFallKey} outerRef={avatarRef} />
 
       {/* Blizzard vignette */}

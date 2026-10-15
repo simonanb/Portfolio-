@@ -87,7 +87,7 @@ export default function Contact() {
           style={{ marginTop: 40 }}
         >
           <a
-            href="mailto:hello@simona.design"
+            href="mailto:simona.nb@hotmail.com"
             className="cursor-hover"
             style={{
               display: 'inline-flex',
@@ -120,45 +120,8 @@ export default function Contact() {
               <rect x="0.75" y="0.75" width="14.5" height="10.5" rx="1.25" stroke="currentColor" strokeWidth="1.5"/>
               <path d="M1 1.5L8 7L15 1.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
             </svg>
-            hello@simona.design
+            simona.nb@hotmail.com
           </a>
-        </motion.div>
-
-        {/* Social links */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.35 }}
-          style={{
-            marginTop: 24,
-            display: 'flex',
-            justifyContent: 'center',
-            gap: 32,
-          }}
-        >
-          {[
-            { label: 'LinkedIn', href: '#' },
-            { label: 'Behance', href: '#' },
-          ].map(({ label, href }) => (
-            <a
-              key={label}
-              href={href}
-              className="cursor-hover"
-              style={{
-                fontFamily: 'Inter, sans-serif',
-                fontSize: 14,
-                color: 'rgba(26,26,42,0.45)',
-                textDecoration: 'none',
-                transition: 'color 0.2s ease',
-                position: 'relative',
-              }}
-              onMouseEnter={e => (e.currentTarget.style.color = '#4A9EBF')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(26,26,42,0.45)')}
-            >
-              {label}
-            </a>
-          ))}
         </motion.div>
       </div>
 

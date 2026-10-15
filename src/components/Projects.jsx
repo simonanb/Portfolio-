@@ -5,14 +5,16 @@ import { motion } from 'framer-motion'
 
 const PROJECTS = [
   {
-    title: 'Донирај.мк',
+    title: 'Daruvaj.mk',
     desc: 'A free donation & item-sharing platform for Macedonia — designed to make giving as frictionless as possible.',
     tags: ['UI Design', 'Next.js', 'Supabase'],
+    image: '/Portfolio-/daruvaj-1.png',
   },
   {
     title: 'Ritual',
     desc: 'Cafe branding for an intimate coffee experience in Skopje — warmth, ritual, and typographic personality.',
     tags: ['Brand Identity', 'Typography', 'Print'],
+    image: '/Portfolio-/ritual-1.png',
   },
   {
     title: 'Portfolio',
@@ -129,6 +131,16 @@ export default function Projects() {
               }}
             >
               <div className="project-card">
+                {/* Project image */}
+                {project.image && (
+                  <div style={{ marginBottom: 20, borderRadius: 10, overflow: 'hidden', height: 160 }}>
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                    />
+                  </div>
+                )}
                 {/* Tag row */}
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 20 }}>
                   {project.tags.map(tag => (

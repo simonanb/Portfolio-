@@ -1,4 +1,5 @@
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
+import { useGoBack } from '../hooks/useGoBack'
 import { projectsBySlug } from '../data/projects'
 
 const bodyStyle = {
@@ -37,9 +38,61 @@ function ImgBox({ label }) {
   )
 }
 
+const FRAME = 20
+
+// Frosted white frame around a screenshot.
+const frameStyle = {
+  boxSizing: 'border-box',
+  padding: FRAME,
+  borderRadius: 28,
+  background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.35))',
+  backdropFilter: 'blur(14px)',
+  WebkitBackdropFilter: 'blur(14px)',
+  border: '1.5px solid #FFFFFF',
+  boxShadow: '0 2px 12px rgba(90, 110, 170, 0.06)',
+}
+
+function FramedImage({ src, fill, width, style }) {
+  return (
+    <div style={{ ...frameStyle, maxWidth: width ? width + FRAME * 2 : '100%', ...style }}>
+      <img
+        src={src}
+        alt=""
+        style={{ display: 'block', borderRadius: 14, boxShadow: '0 0 0 1px rgba(210, 218, 235, 0.6)', ...(fill ? { width: '100%' } : { maxWidth: '100%' }) }}
+      />
+    </div>
+  )
+}
+
+// Each item is an image src, { src, width } to cap its display width,
+// or an array of srcs shown side by side in a row.
+// Images never scale above their natural size, so small modals stay crisp.
+function ImageGallery({ images }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, marginBottom: 52 }}>
+      {images.map((item, i) => Array.isArray(item) ? (
+        <div key={i} style={{ display: 'flex', flexWrap: 'wrap', gap: 20, alignItems: 'flex-start' }}>
+          {item.map((src, j) => (
+            <FramedImage key={j} src={src} fill style={{ flex: '1 1 220px' }} />
+          ))}
+        </div>
+      ) : (
+        <FramedImage
+          key={i}
+          src={item.src ?? item}
+          width={item.width}
+          style={{ width: 'fit-content', margin: '0 auto' }}
+        />
+      ))}
+    </div>
+  )
+}
+
 export default function ProjectPage() {
   const { slug } = useParams()
   const navigate = useNavigate()
+  const { pathname } = useLocation()
+  const goBack = useGoBack('/' + pathname.split('/')[1])
   const project  = projectsBySlug[slug]
 
   if (!project) {
@@ -63,7 +116,7 @@ export default function ProjectPage() {
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '32px 24px 100px' }}>
 
         {/* Back + breadcrumb */}
-        <button className="back-btn" onClick={() => navigate(-1)}>← Back</button>
+        <button className="back-btn" onClick={goBack}>← Back</button>
         <p style={{ fontFamily: 'Inter', fontSize: 12, color: '#B0BDC8', marginTop: 6 }}>
           Home / {project.category} / {project.name}
         </p>
@@ -98,67 +151,93 @@ export default function ProjectPage() {
           </div>
         </div>
 
+        {/* ── Hero image above sections ── */}
+        {project.sections && project.images?.[0] && (
+          <FramedImage src={project.images[0]} fill style={{ marginBottom: 52 }} />
+        )}
+
         {/* ── Content sections ── */}
-        <Section title="Overview" accent={color}>
-          <p style={bodyStyle}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-          </p>
-          <p style={{ ...bodyStyle, marginTop: 16 }}>
-            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-            fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa
-            qui officia deserunt mollit anim id est laborum.
-          </p>
-        </Section>
-
-        <Section title="The Challenge" accent={color}>
-          <p style={bodyStyle}>
-            Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam,
-            nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in
-            ea voluptate velit esse quam nihil molestiae consequatur.
-          </p>
-        </Section>
-
-        <ImgBox label="Project screenshots coming soon" />
-
-        <Section title="My Process" accent={color}>
-          {[
-            ['Research & Discovery', 'User interviews, competitive analysis, and mapping existing workflows to identify friction points.'],
-            ['Ideation & Wireframing', 'Rapid sketching and low-fidelity wireframes to explore solutions before committing to pixels.'],
-            ['Design & Iteration', 'High-fidelity Figma prototypes, usability testing, and iterative refinement based on feedback.'],
-          ].map(([step, desc], i) => (
-            <div key={step} style={{ display: 'flex', gap: 16, marginBottom: 24, alignItems: 'flex-start' }}>
-              <div style={{
-                width: 32, height: 32, borderRadius: '50%',
-                background: color + '18', color,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontFamily: 'Novella, DM Sans, sans-serif', fontSize: 15, fontWeight: 500, flexShrink: 0,
-              }}>
-                {i + 1}
-              </div>
-              <div>
-                <h4 style={{
-                  fontFamily: 'Novella, DM Sans, sans-serif', fontSize: 17, fontWeight: 500,
-                  color: '#1A1A2A', marginBottom: 4,
-                }}>
-                  {step}
-                </h4>
-                <p style={bodyStyle}>{desc}</p>
-              </div>
+        {project.sections ? (
+          project.sections.map(section => (
+            <div key={section.title}>
+              <Section title={section.title} accent={color}>
+                {section.paragraphs.map((p, i) => (
+                  <p key={i} style={{ ...bodyStyle, marginTop: i > 0 ? 16 : 0 }}>{p}</p>
+                ))}
+              </Section>
+              {section.galleryAfter && project.images?.length > 0 && (
+                <ImageGallery images={section.galleryAfter
+                  .map(i => Array.isArray(i) ? i.map(j => project.images[j]).filter(Boolean)
+                    : typeof i === 'object' ? (project.images[i.i] && { src: project.images[i.i], width: i.width })
+                    : project.images[i])
+                  .filter(Boolean)} />
+              )}
             </div>
-          ))}
-        </Section>
+          ))
+        ) : (
+          <>
+            <Section title="Overview" accent={color}>
+              <p style={bodyStyle}>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+              </p>
+              <p style={{ ...bodyStyle, marginTop: 16 }}>
+                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa
+                qui officia deserunt mollit anim id est laborum.
+              </p>
+            </Section>
 
-        <Section title="Outcome" accent={color}>
-          <p style={bodyStyle}>
-            Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia
-            consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro
-            quisquam est, qui dolorem ipsum quia dolor sit amet.
-          </p>
-        </Section>
+            <Section title="The Challenge" accent={color}>
+              <p style={bodyStyle}>
+                Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam,
+                nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in
+                ea voluptate velit esse quam nihil molestiae consequatur.
+              </p>
+            </Section>
 
-        <ImgBox label="Final designs coming soon" />
+            <ImgBox label="Project screenshots coming soon" />
+
+            <Section title="My Process" accent={color}>
+              {[
+                ['Research & Discovery', 'User interviews, competitive analysis, and mapping existing workflows to identify friction points.'],
+                ['Ideation & Wireframing', 'Rapid sketching and low-fidelity wireframes to explore solutions before committing to pixels.'],
+                ['Design & Iteration', 'High-fidelity Figma prototypes, usability testing, and iterative refinement based on feedback.'],
+              ].map(([step, desc], i) => (
+                <div key={step} style={{ display: 'flex', gap: 16, marginBottom: 24, alignItems: 'flex-start' }}>
+                  <div style={{
+                    width: 32, height: 32, borderRadius: '50%',
+                    background: color + '18', color,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontFamily: 'Novella, DM Sans, sans-serif', fontSize: 15, fontWeight: 500, flexShrink: 0,
+                  }}>
+                    {i + 1}
+                  </div>
+                  <div>
+                    <h4 style={{
+                      fontFamily: 'Novella, DM Sans, sans-serif', fontSize: 17, fontWeight: 500,
+                      color: '#1A1A2A', marginBottom: 4,
+                    }}>
+                      {step}
+                    </h4>
+                    <p style={bodyStyle}>{desc}</p>
+                  </div>
+                </div>
+              ))}
+            </Section>
+
+            <Section title="Outcome" accent={color}>
+              <p style={bodyStyle}>
+                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia
+                consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro
+                quisquam est, qui dolorem ipsum quia dolor sit amet.
+              </p>
+            </Section>
+
+            <ImgBox label="Final designs coming soon" />
+          </>
+        )}
 
         {/* Footer */}
         <div style={{

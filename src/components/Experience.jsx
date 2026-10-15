@@ -14,7 +14,7 @@ const ENTRIES = [
     tag: 'Brand',
   },
   {
-    title: 'Донирај.мк — Community Platform',
+    title: 'Daruvaj.mk — Community Platform',
     period: '2025',
     desc: 'End-to-end design for a free donation and item-sharing platform built for Macedonia.',
     tag: 'Product',

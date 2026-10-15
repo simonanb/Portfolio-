@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { useGoBack } from '../hooks/useGoBack'
 import { projects } from '../data/projects'
 
 const CONFIG = {
@@ -21,6 +22,7 @@ const CONFIG = {
 
 export default function CategoryPage({ category }) {
   const navigate = useNavigate()
+  const goBack = useGoBack('/')
   const cfg = CONFIG[category]
   const list = projects[category] || []
 
@@ -28,7 +30,7 @@ export default function CategoryPage({ category }) {
     <div className="page-enter" style={{ background: '#F7F8FA', minHeight: '100vh' }}>
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '32px 24px 100px' }}>
 
-        <button className="back-btn" onClick={() => navigate(-1)}>← Back</button>
+        <button className="back-btn" onClick={goBack}>← Back</button>
 
         <div style={{ marginTop: 36, marginBottom: 48 }}>
           <div style={{

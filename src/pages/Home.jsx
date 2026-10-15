@@ -1,5 +1,5 @@
-import { useState, useRef, useCallback, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useRef, useCallback, useEffect, useLayoutEffect } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
 import gsap from 'gsap'
 import Scene from '../components/Scene'
 import Target from '../components/Target'
@@ -18,6 +18,18 @@ const CATEGORY_LABELS = {
   clay: 'Clay Work',
 }
 
+// Sign positions on phones: placed on the (larger) mountain instead of floating in the sky
+const MOBILE_POS = { ux: { x: 24, y: 36 }, graphic: { x: 74, y: 30 }, about: { x: 52, y: 46 } }
+
+const SKIP_LINKS = [
+  { to: '/ux', label: 'UX/UI Design' },
+  { to: '/graphic', label: 'Graphic Design' },
+  { to: '/about', label: 'About Me' },
+]
+
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+
 const pick = arr => arr[Math.floor(Math.random() * arr.length)]
 const AVATAR_MSGS  = ["I'm calling my lawyer", 'WHO DID THAT?!', 'Excuse me?!']
 const MISS_MSGS    = ['The wind got that one 💨', 'Almost! 🌨️', 'Slippery aim ❄️', 'So close! 🤏', 'Missed! Try again ⛄']
@@ -32,10 +44,15 @@ export default function Home() {
   const [ammoUsed, setAmmoUsed] = useState(0)
   const [comboMsg, setComboMsg] = useState({ text: '', key: 0 })
   const [avatarFallKey, setAvatarFallKey] = useState(0)
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 640)
+  const [introDone, setIntroDone] = useState(false)
+  const [hint, setHint] = useState(null)
+  const [skipOpen, setSkipOpen] = useState(false)
 
   const sceneRef            = useRef(null)
   const targetRefs          = useRef({})
   const avatarRef           = useRef(null)
+  const nameRef             = useRef(null)
   const consecutiveHitsRef  = useRef(0)
   const avatarHitCountRef   = useRef(0)
   const hitTargetsRef       = useRef(new Set())
@@ -47,6 +64,84 @@ export default function Home() {
 
   useEffect(() => { hitTargetsRef.current  = hitTargets  }, [hitTargets])
   useEffect(() => { isBlizzardRef.current  = isBlizzard  }, [isBlizzard])
+
+  /* ── Responsive ── */
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < 640)
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+
+  const posOf = useCallback(
+    t => (isMobile && MOBILE_POS[t.id]) ? { ...t, ...MOBILE_POS[t.id] } : t,
+    [isMobile],
+  )
+
+  /* ── Intro: landscape rises, name fades up, signs drop in ── */
+  useLayoutEffect(() => {
+    const scene = sceneRef.current
+    if (!scene) return
+    if (prefersReducedMotion()) { setIntroDone(true); return }
+    const q = sel => scene.querySelectorAll(sel)
+    // Full intro on the first visit of a session, a quick one when coming back
+    const speed = sessionStorage.getItem('introPlayed') ? 0.45 : 1
+
+    // gsap.context + revert: cleanup restores every element (safe with StrictMode's double effects)
+    const ctx = gsap.context(() => {
+    const tl = gsap.timeline({
+      defaults: { ease: 'power3.out' },
+      onComplete: () => { sessionStorage.setItem('introPlayed', '1'); setIntroDone(true) },
+    })
+    tl.fromTo(q('.scene-illus'),
+        { clipPath: 'inset(100% 0% 0% 0%)', opacity: 0.4 },
+        { clipPath: 'inset(0% 0% 0% 0%)', opacity: 1, duration: 1.5 * speed, ease: 'power2.inOut' })
+      .from(nameRef.current ? nameRef.current.children : [],
+        { y: 18, opacity: 0, duration: 0.7 * speed, stagger: 0.12 * speed }, 0.35 * speed)
+      .from(q('.target-intro'),
+        { y: -70, opacity: 0, duration: 0.9 * speed, ease: 'bounce.out', stagger: 0.18 * speed }, 1.0 * speed)
+      .from(q('.scene-gondola, .scene-avatar, .scene-cloud'),
+        { opacity: 0, duration: 0.8 * speed, stagger: 0.08 * speed }, 1.1 * speed)
+      .from(q('.landing-ui'),
+        { opacity: 0, y: 8, duration: 0.6 * speed, stagger: 0.06 * speed }, 1.4 * speed)
+    }, scene)
+    return () => ctx.revert()
+  }, [])
+
+  /* ── Mouse parallax (desktop only) ── */
+  useEffect(() => {
+    const scene = sceneRef.current
+    if (!scene || isMobile || prefersReducedMotion()) return
+    let raf = 0
+    const onMove = e => {
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(() => {
+        const r = scene.getBoundingClientRect()
+        scene.style.setProperty('--px', (((e.clientX - r.left) / r.width) * 2 - 1).toFixed(3))
+        scene.style.setProperty('--py', (((e.clientY - r.top) / r.height) * 2 - 1).toFixed(3))
+      })
+    }
+    scene.addEventListener('mousemove', onMove)
+    return () => { scene.removeEventListener('mousemove', onMove); cancelAnimationFrame(raf) }
+  }, [isMobile])
+
+  /* ── Throw hint: dashed arc to the UX sign until the first throw ── */
+  useEffect(() => {
+    if (!introDone || ammoUsed > 0) { setHint(null); return }
+    const place = () => {
+      const scene = sceneRef.current, el = targetRefs.current.ux
+      if (!scene || !el) return
+      const sr = scene.getBoundingClientRect()
+      const b  = (el.querySelector('.target-bubble') || el).getBoundingClientRect()
+      setHint({
+        x1: sr.width / 2, y1: sr.height - (isMobile ? 150 : 120),
+        x2: b.left + b.width / 2 - sr.left, y2: b.bottom - sr.top + 6,
+        w: sr.width, h: sr.height,
+      })
+    }
+    place()
+    window.addEventListener('resize', place)
+    return () => window.removeEventListener('resize', place)
+  }, [introDone, ammoUsed, isMobile])
 
   const showMsg = useCallback((text) => {
     setComboMsg(prev => ({ text, key: prev.key + 1 }))
@@ -207,6 +302,8 @@ export default function Home() {
 
   /* ── Scene click → find nearest target & launch ── */
   const handleSceneClick = useCallback((e) => {
+    if (e.target.closest('[data-no-throw]')) return
+    if (skipOpen) { setSkipOpen(false); return }
     if (ammoUsed >= AMMO) return
     if (e.target.closest('[data-carousel-card]')) return
 
@@ -239,7 +336,7 @@ export default function Home() {
 
     setAmmoUsed(n => n + 1)
     launchSnowball(cx, cy, nearest)
-  }, [ammoUsed, hitTargets, launchSnowball])
+  }, [ammoUsed, hitTargets, launchSnowball, skipOpen])
 
   /* ── Close card → reset target ── */
   const handleCloseCard = useCallback((targetId) => {
@@ -257,19 +354,103 @@ export default function Home() {
       onClick={handleSceneClick}
     >
       {/* Background layers */}
-      <Scene isBlizzard={isBlizzard} onThunder={thunderSound} avatarRef={avatarRef} avatarFallKey={avatarFallKey} />
+      <Scene isBlizzard={isBlizzard} onThunder={thunderSound} avatarRef={avatarRef} avatarFallKey={avatarFallKey} isMobile={isMobile} />
 
       {/* ── Weather toggle (top-left) ── */}
-      <WeatherToggle isBlizzard={isBlizzard} onToggle={toggleWeather} />
+      <WeatherToggle isBlizzard={isBlizzard} onToggle={toggleWeather} compact={isMobile} />
+
+      {/* ── Skip the game (top-right) ── */}
+      <div data-no-throw className="landing-ui" style={{ position: 'absolute', top: isMobile ? 16 : 24, right: isMobile ? 16 : 24, zIndex: 36, cursor: 'default' }}>
+        <button
+          onClick={() => setSkipOpen(o => !o)}
+          aria-expanded={skipOpen}
+          style={{
+            display: 'flex', alignItems: 'center', gap: 6,
+            background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(42,74,90,0.18)', borderRadius: 999,
+            padding: isMobile ? '6px 12px' : '7px 14px', cursor: 'pointer',
+            fontFamily: 'Inter, sans-serif', fontSize: 11, fontWeight: 600, color: '#2A4A5A',
+            boxShadow: '0 2px 8px rgba(42,74,90,0.10)',
+          }}
+        >
+          {isMobile ? 'Skip game' : 'Skip the game · View work'}
+          <span style={{ fontSize: 10, display: 'inline-block', transform: skipOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>▾</span>
+        </button>
+        {skipOpen && (
+          <div style={{
+            position: 'absolute', top: 'calc(100% + 8px)', right: 0, minWidth: 180,
+            background: 'white', borderRadius: 14, padding: 6,
+            boxShadow: '0 10px 30px rgba(42,74,90,0.18)', border: '1px solid rgba(42,74,90,0.08)',
+            animation: 'fadein 0.18s ease both',
+          }}>
+            {SKIP_LINKS.map(l => (
+              <Link
+                key={l.to}
+                to={l.to}
+                style={{
+                  display: 'block', padding: '9px 12px', borderRadius: 10,
+                  fontFamily: 'Inter, sans-serif', fontSize: 13, fontWeight: 500,
+                  color: '#2A4A5A', textDecoration: 'none',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#EBF5FA' }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
+              >
+                {l.label} →
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* ── Throw hint (until the first throw) ── */}
+      {hint && (
+        <svg
+          aria-hidden="true"
+          width={hint.w}
+          height={hint.h}
+          style={{ position: 'absolute', inset: 0, zIndex: 19, pointerEvents: 'none', animation: 'fadein 0.5s ease both' }}
+        >
+          <path
+            className="hint-arc"
+            d={`M ${hint.x1} ${hint.y1} Q ${(hint.x1 + hint.x2) / 2} ${Math.min(hint.y1, hint.y2) - (isMobile ? 60 : 110)} ${hint.x2} ${hint.y2}`}
+            fill="none" stroke="#2A4A5A" strokeOpacity="0.45" strokeWidth="2"
+            strokeDasharray="6 8" strokeLinecap="round"
+          />
+          <circle
+            cx={hint.x2} cy={hint.y2} r="7" fill="#4A9EBF"
+            style={{ transformOrigin: `${hint.x2}px ${hint.y2}px`, animation: 'hintPulse 1.4s ease-in-out infinite' }}
+          />
+          <circle cx={hint.x1} cy={hint.y1} r="6" fill="white" stroke="#CCDDE8" />
+        </svg>
+      )}
+      {hint && (
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute', zIndex: 21, pointerEvents: 'none',
+            left: hint.x1, top: hint.y1 - (isMobile ? 46 : 52),
+            transform: 'translateX(-50%)', whiteSpace: 'nowrap',
+            background: '#2A4A5A', color: 'white', borderRadius: 999, padding: '6px 12px',
+            fontFamily: 'Inter, sans-serif', fontSize: 11, fontWeight: 600,
+            boxShadow: '0 4px 14px rgba(42,74,90,0.25)', animation: 'fadein 0.5s ease both',
+          }}
+        >
+          Click a sign to throw a snowball ❄️
+        </div>
+      )}
 
       {/* ── Name overlay (top-center) ── */}
-      <div style={{
-        position: 'absolute', top: 20, left: '50%',
-        transform: 'translateX(-50%)',
-        zIndex: 30, pointerEvents: 'none',
-        display: 'flex', flexDirection: 'column', alignItems: 'center',
-        whiteSpace: 'nowrap',
-      }}>
+      <div
+        ref={nameRef}
+        style={{
+          position: 'absolute', top: isMobile ? 56 : 20, left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 30, pointerEvents: 'none',
+          display: 'flex', flexDirection: 'column', alignItems: 'center',
+          whiteSpace: isMobile ? 'normal' : 'nowrap',
+          textAlign: 'center', width: isMobile ? '92%' : 'auto',
+        }}
+      >
         <h1 style={{
           fontFamily: 'Novella, DM Sans, sans-serif',
           fontSize: 'clamp(48px, 6vw, 70px)',
@@ -282,11 +463,11 @@ export default function Home() {
           Simona
         </h1>
         <p style={{
-          fontFamily: 'Inter, sans-serif', fontSize: 10,
+          fontFamily: 'Inter, sans-serif', fontSize: isMobile ? 9 : 10,
           color: '#4A9EBF', letterSpacing: '0.12em',
           textTransform: 'uppercase', marginTop: 6, fontWeight: 500,
         }}>
-          UI/UX Designer · Graphic Designer · Clay Artist
+          UI/UX Designer · Graphic Designer
         </p>
         <p style={{
           fontFamily: 'Inter, sans-serif', fontSize: 11,
@@ -299,8 +480,13 @@ export default function Home() {
       {/* ── Combo / miss message ── */}
       <ComboMessage text={comboMsg.text} msgKey={comboMsg.key} />
 
-      {/* ── Score pill (bottom-right) ── */}
-      <div style={{ position: 'absolute', bottom: 72, right: 24, zIndex: 30, pointerEvents: 'none' }}>
+      {/* ── Score pill ── */}
+      <div
+        className="landing-ui"
+        style={isMobile
+          ? { position: 'absolute', top: 158, left: '50%', transform: 'translateX(-50%)', zIndex: 30, pointerEvents: 'none' }
+          : { position: 'absolute', bottom: 72, right: 24, zIndex: 30, pointerEvents: 'none' }}
+      >
         <div style={{
           background: 'rgba(255,255,255,0.80)',
           backdropFilter: 'blur(10px)',
@@ -308,29 +494,35 @@ export default function Home() {
           border: '1px solid rgba(74,158,191,0.22)',
           fontFamily: 'Inter, sans-serif', fontSize: 11,
           color: '#4A9EBF', fontWeight: 600, letterSpacing: '0.02em',
+          whiteSpace: 'nowrap',
         }}>
           {score} / 3 targets hit
         </div>
       </div>
 
       {/* ── Targets ── */}
-      {targetData.map(t => (
-        <Target
-          key={t.id}
-          ref={el => { targetRefs.current[t.id] = el }}
-          id={t.id}
-          label={t.label}
-          x={t.x}
-          y={t.y}
-          isHit={hitTargets.has(t.id)}
-          accentColor={t.accentColor}
-          isBlizzard={isBlizzard}
-        />
-      ))}
+      {targetData.map(t0 => {
+        const t = posOf(t0)
+        return (
+          <Target
+            key={t.id}
+            ref={el => { targetRefs.current[t.id] = el }}
+            id={t.id}
+            label={t.label}
+            x={t.x}
+            y={t.y}
+            isHit={hitTargets.has(t.id)}
+            accentColor={t.accentColor}
+            isBlizzard={isBlizzard}
+            compact={isMobile}
+          />
+        )
+      })}
 
       {/* ── Carousel cards ── */}
       {Object.keys(activeCards).map(tid => {
-        const t = targetData.find(d => d.id === tid)
+        const t0 = targetData.find(d => d.id === tid)
+        const t  = t0 && posOf(t0)
         if (!t || !t.category) return null
         return (
           <CarouselCard
@@ -348,13 +540,16 @@ export default function Home() {
       })}
 
       {/* ── Ammo counter (bottom-center) ── */}
-      <div style={{
-        position: 'absolute', bottom: 26, left: '50%',
-        transform: 'translateX(-50%)',
-        zIndex: 30, pointerEvents: 'none',
-        display: 'flex', flexDirection: 'column', alignItems: 'center',
-        whiteSpace: 'nowrap',
-      }}>
+      <div
+        className="landing-ui"
+        style={{
+          position: 'absolute', bottom: 26, left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 30, pointerEvents: 'none',
+          display: 'flex', flexDirection: 'column', alignItems: 'center',
+          whiteSpace: 'nowrap',
+        }}
+      >
         <div style={{ display: 'flex', gap: 7, marginBottom: 6 }}>
           {Array.from({ length: AMMO }).map((_, i) => (
             <div key={i} style={{

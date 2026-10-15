@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Home from './pages/Home'
 import ProjectPage from './pages/ProjectPage'
 import CategoryPage from './pages/CategoryPage'
@@ -16,6 +16,7 @@ export default function App() {
         <Route path="/clay" element={<CategoryPage category="clay" />} />
         <Route path="/clay/:slug" element={<ProjectPage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   )

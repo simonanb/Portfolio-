@@ -1,12 +1,13 @@
-export default function WeatherToggle({ isBlizzard, onToggle }) {
+export default function WeatherToggle({ isBlizzard, onToggle, compact = false }) {
   return (
     <button
       onClick={e => { e.stopPropagation(); onToggle() }}
       aria-label={isBlizzard ? 'Switch to calm' : 'Switch to blizzard'}
+      className="landing-ui"
       style={{
         position: 'absolute',
-        top: 24,
-        left: 24,
+        top: compact ? 16 : 24,
+        left: compact ? 16 : 24,
         zIndex: 35,
         display: 'flex',
         alignItems: 'center',
@@ -36,7 +37,7 @@ export default function WeatherToggle({ isBlizzard, onToggle }) {
         transition: 'background 0.28s ease, color 0.28s ease',
       }}>
         <span style={{ fontSize: 13, lineHeight: 1 }}>☀️</span>
-        Calm
+        {!compact && 'Calm'}
       </div>
 
       {/* 🌨️ Blizzard */}
@@ -54,7 +55,7 @@ export default function WeatherToggle({ isBlizzard, onToggle }) {
         transition: 'background 0.28s ease, color 0.28s ease',
       }}>
         <span style={{ fontSize: 13, lineHeight: 1 }}>🌨️</span>
-        Blizzard
+        {!compact && 'Blizzard'}
       </div>
     </button>
   )

@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useGoBack } from '../hooks/useGoBack'
 
 const SKILLS = [
   'Figma', 'UI Design', 'UX Research', 'Prototyping',
@@ -12,13 +12,13 @@ const INTERESTS = [
 ]
 
 export default function AboutPage() {
-  const navigate = useNavigate()
+  const goBack = useGoBack('/')
 
   return (
     <div className="page-enter" style={{ background: '#F7F8FA', minHeight: '100vh' }}>
       <div style={{ maxWidth: 700, margin: '0 auto', padding: '32px 24px 100px' }}>
 
-        <button className="back-btn" onClick={() => navigate(-1)}>← Back</button>
+        <button className="back-btn" onClick={goBack}>← Back</button>
 
         <h1 style={{
           fontFamily: 'Novella, DM Sans, sans-serif',
@@ -76,23 +76,10 @@ export default function AboutPage() {
             }}>
               Skills
             </h2>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 36 }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
               {SKILLS.map(s => (
                 <span key={s} className="skill-pill">{s}</span>
               ))}
-            </div>
-
-            <div style={{
-              background: 'linear-gradient(135deg, #EBF5FA 0%, #EEF5FF 100%)',
-              borderRadius: 14, padding: '20px 22px',
-              border: '1px solid rgba(74,158,191,0.14)',
-            }}>
-              <p style={{
-                fontFamily: 'Novella, DM Sans, sans-serif', fontSize: 16, fontWeight: 400,
-                color: '#2A3A4A', lineHeight: 1.62,
-              }}>
-                "I believe the best designs disappear — they just feel obvious in hindsight."
-              </p>
             </div>
           </div>
         </div>
@@ -107,30 +94,17 @@ export default function AboutPage() {
             Let's make something.
           </h2>
           <a
-            href="mailto:hello@simona.design"
+            href="mailto:simona.nb@hotmail.com"
             style={{
               display: 'inline-block',
               background: '#4A9EBF', color: 'white',
               borderRadius: 999, padding: '10px 26px',
               fontFamily: 'Inter', fontSize: 14, fontWeight: 500,
-              textDecoration: 'none', marginBottom: 20,
+              textDecoration: 'none',
             }}
           >
-            hello@simona.design
+            simona.nb@hotmail.com
           </a>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 28 }}>
-            {['LinkedIn', 'Behance'].map(l => (
-              <a
-                key={l}
-                href="#"
-                style={{ fontFamily: 'Inter', fontSize: 13, color: '#7A8A9A', textDecoration: 'none' }}
-                onMouseEnter={e => { e.currentTarget.style.color = '#4A9EBF' }}
-                onMouseLeave={e => { e.currentTarget.style.color = '#7A8A9A' }}
-              >
-                {l}
-              </a>
-            ))}
-          </div>
         </div>
 
         <div style={{ textAlign: 'center', marginTop: 52 }}>
