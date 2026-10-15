@@ -89,26 +89,92 @@ const SPRAY = [
   { s: 4, dx: -14, dy: -10, d: 0.75 },
 ]
 
-function Avatar({ isBlizzard, fallKey, outerRef }) {
+// ── Slope geometry (same curve as the snow SVG, viewBox 0 0 1440 198, bottom 18% of the scene) ──
+function slopeVB(x) {
+  if (x <= 720) { const t = x / 720; return (1 - t) ** 2 * 8 + 2 * (1 - t) * t * 22 + t ** 2 * 52 }
+  const t = (x - 720) / 720; return (1 - t) ** 2 * 52 + 2 * (1 - t) * t * 80 + t ** 2 * 104
+}
+export function slopeY(X, W, H) {
+  const x = Math.max(0, Math.min(1440, (X / W) * 1440))
+  return H * 0.82 + slopeVB(x) * (H * 0.18 / 198)
+}
+
+// Short hatch strokes under the slope edge: [x, offset below edge, length] in viewBox units
+const HATCH = [
+  [70, 16, 46], [96, 26, 30], [250, 18, 52], [282, 30, 34], [430, 22, 40],
+  [610, 18, 56], [640, 30, 30], [820, 20, 44], [990, 16, 50], [1020, 28, 32],
+  [1180, 22, 46], [1330, 16, 52], [1356, 28, 30],
+]
+
+const BOARD_Y  = 106  // board bottom inside the 120px-tall rider image
+const SINK     = 12   // how far the board sits into the snow below the edge line
+const TRACK_LEN = 280
+
+function Avatar({ isBlizzard, fallKey, outerRef, trackRef }) {
   const innerRef = useRef(null)
+  const tiltRef  = useRef(null)
   const tlRef    = useRef(null)
-  const duration = isBlizzard ? 13 : 26
-  const tilt     = isBlizzard ? 13 : 8
+  const pausedRef = useRef(false)
+  const progRef  = useRef(0.3)
+  const durRef   = useRef(26)
+  durRef.current = isBlizzard ? 13 : 26
+
+  // Ride along the slope edge, leaning with its angle
+  useEffect(() => {
+    const outer = outerRef?.current
+    if (!outer) return
+    let raf = 0, last = performance.now()
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    const frame = now => {
+      const dt = Math.min(0.05, (now - last) / 1000); last = now
+      const scene = outer.parentElement
+      const W = scene.clientWidth, H = scene.clientHeight
+      if (!pausedRef.current && !reduce) progRef.current = (progRef.current + dt / durRef.current) % 1
+      const X = -160 + progRef.current * (W + 320)
+      const Y = slopeY(X, W, H) + SINK
+      const ang = Math.atan2(slopeY(X + 20, W, H) - slopeY(X - 20, W, H), 40) * 180 / Math.PI
+      outer.style.transform = `translate(${X - 48}px, ${Y - BOARD_Y}px)`
+      if (tiltRef.current) tiltRef.current.style.transform = `rotate(${ang * 0.9 + (isBlizzardRef.current ? 4 : 0)}deg)`
+      // Board tracks: two thin lines behind the rider, fading out
+      const tr = trackRef?.current
+      if (tr) {
+        const pts = (off) => {
+          const out = []
+          for (let i = 0; i <= 14; i++) {
+            const x = X - 30 - (TRACK_LEN * i) / 14
+            out.push(`${x.toFixed(1)},${(slopeY(x, W, H) + SINK + off).toFixed(1)}`)
+          }
+          return out.join(' ')
+        }
+        tr.setAttribute('width', W); tr.setAttribute('height', H)
+        tr.children[1].setAttribute('points', pts(-1))
+        tr.children[2].setAttribute('points', pts(3))
+        const g = tr.querySelector('linearGradient')
+        g.setAttribute('x1', X - 30); g.setAttribute('x2', X - 30 - TRACK_LEN)
+        tr.style.opacity = pausedRef.current ? 0 : 1
+      }
+      raf = requestAnimationFrame(frame)
+    }
+    raf = requestAnimationFrame(frame)
+    return () => cancelAnimationFrame(raf)
+  }, [outerRef, trackRef])
+
+  const isBlizzardRef = useRef(isBlizzard)
+  isBlizzardRef.current = isBlizzard
 
   useEffect(() => {
-    if (!fallKey || !outerRef?.current || !innerRef.current) return
-    const outer = outerRef.current
+    if (!fallKey || !innerRef.current) return
     const inner = innerRef.current
     if (tlRef.current) tlRef.current.kill()
     gsap.set(inner, { rotation: 0, y: 0 })
-    outer.style.animationPlayState = 'paused'
+    pausedRef.current = true
     tlRef.current = gsap.timeline({
-      onComplete: () => { outer.style.animationPlayState = 'running' },
+      onComplete: () => { pausedRef.current = false },
     })
       .to(inner, { rotation: -75, y: 22, duration: 0.25, ease: 'power3.in' })
       .to(inner, { duration: 2.4 })
       .to(inner, { rotation: 0, y: 0, duration: 0.6, ease: 'back.out(1.5)' })
-  }, [fallKey, outerRef])
+  }, [fallKey])
 
   return (
     <div
@@ -117,15 +183,15 @@ function Avatar({ isBlizzard, fallKey, outerRef }) {
       aria-hidden="true"
       style={{
         position: 'absolute',
-        bottom: '10%',
+        top: 0,
         left: 0,
         pointerEvents: 'none',
         zIndex: 5,
-        animation: `avatarDrift ${duration}s linear -8s infinite`,
+        willChange: 'transform',
       }}
     >
-      {/* Static slope tilt — React-controlled */}
-      <div style={{ transform: `rotate(${tilt}deg)`, transformOrigin: 'center bottom', transition: 'transform 0.6s ease' }}>
+      {/* Lean with the slope — updated every frame */}
+      <div ref={tiltRef} style={{ transformOrigin: `50% ${BOARD_Y}px` }}>
         {/* Fall/rise — GSAP-controlled */}
         <div ref={innerRef} style={{ transformOrigin: 'center bottom', position: 'relative' }}>
           {/* S-curve carving */}
@@ -241,9 +307,70 @@ const MTN_D = [
   `M179.72,174.46c1.98-4.86,4.13-10.41,7.55-14.36-1.68,4.86-4.23,10.37-7.55,14.36Z`,
 ]
 
+
+// ── Wooden fence on the left of the slope, drawn in the illustration's ink ──
+function SlopeFence({ isMobile }) {
+  const ref = useRef(null)
+  const [size, setSize] = useState(null)
+  useEffect(() => {
+    const scene = ref.current?.parentElement
+    if (!scene) return
+    const update = () => setSize({ W: scene.clientWidth, H: scene.clientHeight })
+    update()
+    const ro = new ResizeObserver(update)
+    ro.observe(scene)
+    return () => ro.disconnect()
+  }, [])
+
+  let posts = [], rails = ''
+  if (size) {
+    const { W, H } = size
+    const x0 = W * (isMobile ? 0.02 : 0.025), x1 = W * (isMobile ? 0.3 : 0.2)
+    const gap = isMobile ? 26 : 34, h = isMobile ? 24 : 32
+    const lean = [-2, 1.5, -1, 2.5, -1.5, 1, -2.5, 0.5, 2, -1, 1.5, -2]
+    for (let i = 0, x = x0; x <= x1; i++, x += gap) {
+      const base = slopeY(x, W, H) - (isMobile ? 9 : 14) // stands behind the slope edge, above the rider's line
+      posts.push({ x, base, h: h + (i % 3 === 1 ? 3 : 0), lean: lean[i % lean.length] })
+    }
+    const rail = off => posts.map(p => `${p.x.toFixed(1)},${(p.base - p.h * off).toFixed(1)}`).join(' ')
+    rails = [rail(0.72), rail(0.38)]
+  }
+
+  return (
+    <svg ref={ref} aria-hidden="true" className="parallax-mid"
+      width={size?.W || 0} height={size?.H || 0}
+      style={{ position: 'absolute', left: 0, top: 0, zIndex: 3, pointerEvents: 'none', overflow: 'visible' }}>
+      {size && (
+        <g stroke="#46676e" strokeLinecap="round" strokeLinejoin="round">
+          {rails.map((pts, i) => (
+            <polyline key={i} points={pts} fill="none" strokeWidth={isMobile ? 2.4 : 3} />
+          ))}
+          {posts.map((p, i) => {
+            const w = isMobile ? 4.5 : 6
+            return (
+              <g key={i} transform={`rotate(${p.lean} ${p.x} ${p.base})`}>
+                {/* post with a slightly pointed top */}
+                <path d={`M${p.x - w / 2},${p.base} L${p.x - w / 2},${p.base - p.h + 3} L${p.x},${p.base - p.h - 1} L${p.x + w / 2},${p.base - p.h + 3} L${p.x + w / 2},${p.base} Z`}
+                  fill="#46676e" strokeWidth="1" />
+                {/* wood grain */}
+                <line x1={p.x} y1={p.base - p.h * 0.85} x2={p.x} y2={p.base - p.h * 0.55} stroke="#F4F9FC" strokeOpacity="0.35" strokeWidth="0.8" />
+                {/* snow cap */}
+                <ellipse cx={p.x} cy={p.base - p.h + 0.5} rx={w * 0.75} ry={2.2} fill="#FFFFFF" stroke="none" />
+                {/* snow piled at the foot */}
+                <ellipse cx={p.x + 1} cy={p.base + 1} rx={w * 1.3} ry={2.6} fill="#F4F9FC" stroke="none" />
+              </g>
+            )
+          })}
+        </g>
+      )}
+    </svg>
+  )
+}
+
 export default function Scene({ isBlizzard = false, onThunder, avatarRef, avatarFallKey = 0, isMobile = false }) {
   const [flashCount, setFlashCount] = useState(0)
   const timerRef = useRef(null)
+  const trackRef = useRef(null)
 
   useEffect(() => {
     const clear = () => { if (timerRef.current) clearTimeout(timerRef.current) }
@@ -315,38 +442,62 @@ export default function Scene({ isBlizzard = false, onThunder, avatarRef, avatar
       {/* Gondola */}
       <Gondola isMobile={isMobile} />
 
-      {/* Snow ground — downhill slope, high-left to low-right */}
+      {/* Snow ground — downhill slope, high-left to low-right, drawn in the illustration's ink */}
       <svg
         aria-hidden="true"
-        style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '18%', zIndex: 2, pointerEvents: 'none' }}
+        style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '18%', zIndex: 2, pointerEvents: 'none', overflow: 'visible' }}
         viewBox="0 0 1440 198"
         preserveAspectRatio="none"
       >
         <defs>
-          <linearGradient id="snowBase" x1="0" y1="0" x2="1" y2="0.3">
-            <stop offset="0%"  stopColor="#EEF6FA" />
-            <stop offset="100%" stopColor="#E4F0F6" />
+          <linearGradient id="snowBase" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"  stopColor="#F4F9FC" />
+            <stop offset="100%" stopColor="#E6F1F7" />
           </linearGradient>
         </defs>
-        {/* Diagonal slope — rises on the left, descends to the right */}
         <path d="M0,8 Q360,22 720,52 Q1080,80 1440,104 L1440,198 L0,198 Z" fill="url(#snowBase)" />
-        {/* Ski-track speed lines following the slope angle */}
-        {[120, 300, 500, 680, 880, 1060, 1240, 1400].map((x, i) => {
-          const baseY = 14 + (x / 1440) * 98
+        {/* Hand-drawn edge: one pen line with small breaks */}
+        <path
+          d="M0,8 Q360,22 720,52 Q1080,80 1440,104"
+          fill="none"
+          stroke={isBlizzard ? '#3E5C63' : '#46676e'}
+          strokeWidth="1.3"
+          strokeLinecap="round"
+          strokeDasharray="260 9 120 7 340 12 90 6 420 10 600"
+          vectorEffect="non-scaling-stroke"
+          style={{ transition: 'stroke 0.8s ease' }}
+        />
+        {/* Snow hatching that follows the slope (illustration style) */}
+        {HATCH.map(([x, dy, len], i) => {
+          const y = slopeVB(x) + dy, y2 = slopeVB(Math.min(1440, x + len)) + dy
           return (
-            <g key={x} opacity="0.18">
-              <line x1={x}      y1={baseY + 14} x2={x + 38} y2={baseY + 30} stroke="#2A4A5A" strokeWidth="1.4" strokeLinecap="round" />
-              <line x1={x + 16} y1={baseY +  8} x2={x + 54} y2={baseY + 24} stroke="#2A4A5A" strokeWidth="1.4" strokeLinecap="round" />
-            </g>
+            <line key={i} x1={x} y1={y} x2={Math.min(1440, x + len)} y2={y2}
+              stroke="#46676e" strokeOpacity={0.32} strokeWidth="1.4" strokeLinecap="round"
+              vectorEffect="non-scaling-stroke" />
           )
         })}
+      </svg>
+
+      {/* Fence on the left of the slope */}
+      <SlopeFence isMobile={isMobile} />
+
+      {/* Board tracks behind the rider (points set every frame by Avatar) */}
+      <svg ref={trackRef} aria-hidden="true" style={{ position: 'absolute', left: 0, top: 0, zIndex: 4, pointerEvents: 'none', transition: 'opacity 0.3s' }}>
+        <defs>
+          <linearGradient id="trackFade" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="-280" y2="0">
+            <stop offset="0%" stopColor="#46676e" stopOpacity="0.35" />
+            <stop offset="100%" stopColor="#46676e" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <polyline fill="none" stroke="url(#trackFade)" strokeWidth="1.3" strokeLinecap="round" />
+        <polyline fill="none" stroke="url(#trackFade)" strokeWidth="1.3" strokeLinecap="round" />
       </svg>
 
       {/* Clouds */}
       {CLOUDS.map((c, i) => <Cloud key={i} {...c} isBlizzard={isBlizzard} />)}
 
       {/* Avatar riding on snow */}
-      <Avatar isBlizzard={isBlizzard} fallKey={avatarFallKey} outerRef={avatarRef} />
+      <Avatar isBlizzard={isBlizzard} fallKey={avatarFallKey} outerRef={avatarRef} trackRef={trackRef} />
 
       {/* Blizzard vignette */}
       <div
