@@ -149,8 +149,6 @@ export const projects = {
         '/Portfolio-/clearforward-17.png',
         '/Portfolio-/clearforward-18.png',
         '/Portfolio-/clearforward-19.png',
-        '/Portfolio-/clearforward-mobile-1.png',
-        '/Portfolio-/clearforward-mobile-2.png',
       ],
       fullDesc:
         'A SaaS platform streamlining orthodontic case management with intuitive patient tracking, treatment planning, and clinical workflow tools.',
@@ -242,7 +240,6 @@ export const projects = {
             "The core flow lets a doctor review a treatment plan from start to finish on the go: open the case, check the details and the plan summary, watch the treatment plan animation, and then approve it or request changes by picking a reason and adding a comment. Notes keep the conversation with the clinician going from the same screen.",
             "Phones are also the easiest way to capture clinical photos, so I designed a photo flow around the camera. Doctors can take photos or choose them from their library, review them before saving, and see which required shots are still missing for a case submission. Photos are grouped by date on the patient profile and can be selected and deleted in bulk, while cases always keep their own copies.",
           ],
-          galleryAfter: [19, 20],
         },
         {
           title: 'Visual Design & Design System',
