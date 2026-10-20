@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 
 const SKILLS = [
   'Figma', 'UI Design', 'UX Research', 'Prototyping',
-  'Branding', 'Adobe Photoshop', 'Adobe InDesign', 'Adobe Illustrator',
+  'Branding', 'Adobe Photoshop', 'Adobe InDesign', 'Adobe Illustrator', 'Claude', 'Figma AI',
 ]
 
 function DenseTree({ height, color, opacity }) {

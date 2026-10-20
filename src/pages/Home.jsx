@@ -360,7 +360,21 @@ export default function Home() {
       <WeatherToggle isBlizzard={isBlizzard} onToggle={toggleWeather} compact={isMobile} />
 
       {/* ── Skip the game (top-right) ── */}
-      <div data-no-throw className="landing-ui" style={{ position: 'absolute', top: isMobile ? 16 : 24, right: isMobile ? 16 : 24, zIndex: 36, cursor: 'default' }}>
+      <div data-no-throw className="landing-ui" style={{ position: 'absolute', top: isMobile ? 16 : 24, right: isMobile ? 16 : 24, zIndex: 36, cursor: 'default', display: 'flex', gap: 8 }}>
+        <a
+          href={`${import.meta.env.BASE_URL}Simona-CV.pdf`}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'flex', alignItems: 'center',
+            background: '#4A9EBF', border: '1px solid #4A9EBF', borderRadius: 999,
+            padding: isMobile ? '6px 12px' : '7px 14px',
+            fontFamily: 'Inter, sans-serif', fontSize: 11, fontWeight: 600, color: 'white',
+            textDecoration: 'none', boxShadow: '0 2px 8px rgba(42,74,90,0.10)',
+          }}
+        >
+          {isMobile ? 'CV ↓' : 'Download CV ↓'}
+        </a>
         <button
           onClick={() => setSkipOpen(o => !o)}
           aria-expanded={skipOpen}

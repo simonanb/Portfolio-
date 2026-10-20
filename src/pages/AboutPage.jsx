@@ -2,12 +2,11 @@ import { useGoBack } from '../hooks/useGoBack'
 
 const SKILLS = [
   'Figma', 'UI Design', 'UX Research', 'Prototyping',
-  'Branding', 'Graphic Design', 'Adobe Photoshop', 'Adobe InDesign', 'Adobe Illustrator',
+  'Branding', 'Graphic Design', 'Adobe Photoshop', 'Adobe InDesign', 'Adobe Illustrator', 'Claude', 'Figma AI',
 ]
 
 const INTERESTS = [
   { emoji: '🏔', label: 'Snowboarding',  desc: 'Found on slopes when not on screens.' },
-  { emoji: '🎨', label: 'Air dry clay',  desc: 'Hands in clay, mind on forms.' },
   { emoji: '💻', label: 'UI/UX Design',  desc: 'Obsessed with beautiful, usable interfaces.' },
 ]
 
@@ -24,10 +23,25 @@ export default function AboutPage() {
           fontFamily: 'Novella, DM Sans, sans-serif',
           fontSize: 'clamp(34px, 6vw, 52px)',
           fontWeight: 400, color: '#1A1A2A',
-          marginTop: 32, marginBottom: 44, lineHeight: 1.05,
+          marginTop: 32, marginBottom: 20, lineHeight: 1.05,
         }}>
           About me
         </h1>
+
+        {/* Quick actions */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 44 }}>
+          <a
+            className="cta-btn"
+            href={`${import.meta.env.BASE_URL}Simona-CV.pdf`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Download CV ↓
+          </a>
+          <a className="cv-btn" href="mailto:simona.nb@hotmail.com">
+            Get in touch
+          </a>
+        </div>
 
         {/* Two-column grid */}
         <div style={{
@@ -85,25 +99,23 @@ export default function AboutPage() {
         </div>
 
         {/* Contact section */}
-        <div style={{ textAlign: 'center', paddingTop: 48, borderTop: '1px solid #E4EAF0' }}>
+        <div style={{
+          textAlign: 'center',
+          background: '#EBF5FA', border: '1px solid #D3E8F2',
+          borderRadius: 24, padding: '52px 24px',
+        }}>
           <h2 style={{
             fontFamily: 'Novella, DM Sans, sans-serif',
-            fontSize: 'clamp(26px, 4vw, 40px)',
-            fontWeight: 400, color: '#1A1A2A', marginBottom: 18,
+            fontSize: 'clamp(30px, 5vw, 46px)',
+            fontWeight: 400, color: '#1A1A2A', marginBottom: 12,
           }}>
             Let's make something.
           </h2>
+          <p style={{ fontFamily: 'Inter', fontSize: 15, color: '#5A6A7A', marginBottom: 28 }}>
+            Have a project or a role in mind? I'd love to hear about it.
+          </p>
           <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 12 }}>
-            <a
-              href="mailto:simona.nb@hotmail.com"
-              style={{
-                display: 'inline-block',
-                background: '#4A9EBF', color: 'white',
-                borderRadius: 999, padding: '10px 26px',
-                fontFamily: 'Inter', fontSize: 14, fontWeight: 500,
-                textDecoration: 'none',
-              }}
-            >
+            <a className="cta-btn" href="mailto:simona.nb@hotmail.com">
               simona.nb@hotmail.com
             </a>
             <a

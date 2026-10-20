@@ -2,7 +2,6 @@ import { motion } from 'framer-motion'
 
 const INTERESTS = [
   { icon: '🏔', label: 'Snowboarding', desc: 'Finding flow on fresh powder' },
-  { icon: '🎨', label: 'Air dry clay', desc: 'Sculpting tiny worlds' },
   { icon: '💻', label: 'UI/UX Design', desc: 'Making the digital feel human' },
 ]
 
