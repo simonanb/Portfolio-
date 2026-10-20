@@ -347,17 +347,6 @@ export const projects = {
         },
       ],
     },
-    {
-      slug: 'portfolio',
-      name: 'This Portfolio',
-      desc: 'Snowball game portfolio. Yes, this one',
-      tags: ['Creative Dev', 'GSAP', 'React', 'Vite'],
-      color: '#4A9EBF',
-      category: 'UX Design',
-      image: null,
-      fullDesc:
-        'An interactive portfolio where visitors throw snowballs at targets to discover projects. Built with React, GSAP physics, and a very specific sense of humour.',
-    },
   ],
   graphic: [
     {
