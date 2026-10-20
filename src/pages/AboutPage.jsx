@@ -32,7 +32,7 @@ export default function AboutPage() {
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 44 }}>
           <a
             className="cta-btn"
-            href={`${import.meta.env.BASE_URL}Simona-CV.pdf`}
+            href={`${import.meta.env.BASE_URL}Simona-CV.pdf?v=${__BUILD_TIME__}`}
             target="_blank"
             rel="noopener noreferrer"
           >
