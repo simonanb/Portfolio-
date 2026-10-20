@@ -1,13 +1,12 @@
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-// Go back in history, or to `fallback` when the page was opened directly
-// (React Router stores the in-app history index on history.state.idx)
-export function useGoBack(fallback = '/') {
+// Go up one level (project → category → landing) instead of back in history,
+// so the Back button never bounces between the same two pages
+export function useGoBack(parent = '/') {
   const navigate = useNavigate()
 
   return useCallback(() => {
-    if (window.history.state?.idx > 0) navigate(-1)
-    else navigate(fallback)
-  }, [navigate, fallback])
+    navigate(parent)
+  }, [navigate, parent])
 }
