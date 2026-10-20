@@ -118,14 +118,6 @@ export default function AboutPage() {
             <a className="cta-btn" href="mailto:simona.nb@hotmail.com">
               simona.nb@hotmail.com
             </a>
-            <a
-              className="cv-btn"
-              href={`${import.meta.env.BASE_URL}Simona-CV.pdf`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Download CV ↓
-            </a>
           </div>
         </div>
 
