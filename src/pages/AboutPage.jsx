@@ -20,7 +20,7 @@ export default function AboutPage() {
         <button className="back-btn" onClick={goBack}>← Back</button>
 
         <h1 style={{
-          fontFamily: 'Novella, DM Sans, sans-serif',
+          fontFamily: 'Fraunces, Georgia, serif',
           fontSize: 'clamp(34px, 6vw, 52px)',
           fontWeight: 400, color: '#1A1A2A',
           marginTop: 32, marginBottom: 20, lineHeight: 1.05,
@@ -72,7 +72,7 @@ export default function AboutPage() {
                 }}>
                   <span style={{ fontSize: 22, flexShrink: 0 }}>{emoji}</span>
                   <div>
-                    <p style={{ fontFamily: 'Novella, DM Sans, sans-serif', fontSize: 14, fontWeight: 500, color: '#1A1A2A', marginBottom: 2 }}>
+                    <p style={{ fontFamily: 'Fraunces, Georgia, serif', fontSize: 14, fontWeight: 500, color: '#1A1A2A', marginBottom: 2 }}>
                       {label}
                     </p>
                     <p style={{ fontFamily: 'Inter', fontSize: 12, color: '#9AAAB8' }}>{desc}</p>
@@ -85,7 +85,7 @@ export default function AboutPage() {
           {/* Right: skills + quote */}
           <div>
             <h2 style={{
-              fontFamily: 'Novella, DM Sans, sans-serif', fontSize: 20, fontWeight: 500,
+              fontFamily: 'Fraunces, Georgia, serif', fontSize: 20, fontWeight: 500,
               color: '#1A1A2A', marginBottom: 16,
             }}>
               Skills
@@ -105,7 +105,7 @@ export default function AboutPage() {
           borderRadius: 24, padding: '52px 24px',
         }}>
           <h2 style={{
-            fontFamily: 'Novella, DM Sans, sans-serif',
+            fontFamily: 'Fraunces, Georgia, serif',
             fontSize: 'clamp(30px, 5vw, 46px)',
             fontWeight: 400, color: '#1A1A2A', marginBottom: 12,
           }}>

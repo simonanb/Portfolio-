@@ -466,7 +466,7 @@ export default function Home() {
         }}
       >
         <h1 style={{
-          fontFamily: 'Novella, DM Sans, sans-serif',
+          fontFamily: 'Fraunces, Georgia, serif',
           fontSize: 'clamp(48px, 6vw, 70px)',
           fontWeight: 400,
           color: '#46676e',

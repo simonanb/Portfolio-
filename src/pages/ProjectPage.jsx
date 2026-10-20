@@ -15,7 +15,7 @@ function Section({ title, accent, children }) {
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
         <div style={{ width: 3, height: 22, background: accent, borderRadius: 2 }} />
         <h2 style={{
-          fontFamily: 'Novella, DM Sans, sans-serif', fontSize: 22, fontWeight: 500,
+          fontFamily: 'Fraunces, Georgia, serif', fontSize: 22, fontWeight: 500,
           color: '#1A1A2A', margin: 0,
         }}>
           {title}
@@ -134,7 +134,7 @@ export default function ProjectPage() {
             {project.category}
           </div>
           <h1 style={{
-            fontFamily: 'Novella, DM Sans, sans-serif',
+            fontFamily: 'Fraunces, Georgia, serif',
             fontSize: 'clamp(34px, 5.5vw, 56px)',
             fontWeight: 400, color: '#1A1A2A',
             lineHeight: 1.05, marginBottom: 16,
@@ -210,13 +210,13 @@ export default function ProjectPage() {
                     width: 32, height: 32, borderRadius: '50%',
                     background: color + '18', color,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontFamily: 'Novella, DM Sans, sans-serif', fontSize: 15, fontWeight: 500, flexShrink: 0,
+                    fontFamily: 'Fraunces, Georgia, serif', fontSize: 15, fontWeight: 500, flexShrink: 0,
                   }}>
                     {i + 1}
                   </div>
                   <div>
                     <h4 style={{
-                      fontFamily: 'Novella, DM Sans, sans-serif', fontSize: 17, fontWeight: 500,
+                      fontFamily: 'Fraunces, Georgia, serif', fontSize: 17, fontWeight: 500,
                       color: '#1A1A2A', marginBottom: 4,
                     }}>
                       {step}

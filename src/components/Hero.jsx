@@ -51,7 +51,7 @@ export default function Hero() {
         <motion.h1
           variants={item}
           style={{
-            fontFamily: 'Novella, DM Sans, sans-serif',
+            fontFamily: 'Fraunces, Georgia, serif',
             fontSize: 'clamp(52px, 8.5vw, 96px)',
             fontWeight: 700,
             color: '#1A1A2A',

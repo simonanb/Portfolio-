@@ -55,7 +55,7 @@ const Target = forwardRef(({ id, label, x, y, isHit, accentColor, isBlizzard, co
               >
                 <span
                   style={{
-                    fontFamily: 'Novella, DM Sans, sans-serif',
+                    fontFamily: 'Fraunces, Georgia, serif',
                     fontSize: compact ? '14px' : '15px',
                     fontWeight: 500,
                     color: isHit ? 'white' : '#2A4A5A',

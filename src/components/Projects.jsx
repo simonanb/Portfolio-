@@ -66,7 +66,7 @@ export default function Projects() {
         <div ref={headingRef} style={{ marginBottom: 64 }}>
           <h2
             style={{
-              fontFamily: 'Novella, DM Sans, sans-serif',
+              fontFamily: 'Fraunces, Georgia, serif',
               fontSize: 'clamp(36px, 5vw, 48px)',
               fontWeight: 700,
               color: '#1A1A2A',
@@ -166,7 +166,7 @@ export default function Projects() {
 
                 <h3
                   style={{
-                    fontFamily: 'Novella, DM Sans, sans-serif',
+                    fontFamily: 'Fraunces, Georgia, serif',
                     fontSize: 26,
                     fontWeight: 600,
                     color: '#1A1A2A',

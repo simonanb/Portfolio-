@@ -43,7 +43,7 @@ export default function CategoryPage({ category }) {
             {cfg.label}
           </div>
           <h1 style={{
-            fontFamily: 'Novella, DM Sans, sans-serif',
+            fontFamily: 'Fraunces, Georgia, serif',
             fontSize: 'clamp(34px, 5vw, 54px)',
             fontWeight: 400, color: '#1A1A2A',
             lineHeight: 1.05, marginBottom: 12,
@@ -85,7 +85,7 @@ export default function CategoryPage({ category }) {
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <h2 style={{
-                  fontFamily: 'Novella, DM Sans, sans-serif', fontSize: 24, fontWeight: 400,
+                  fontFamily: 'Fraunces, Georgia, serif', fontSize: 24, fontWeight: 400,
                   color: '#1A1A2A', marginBottom: 6,
                 }}>
                   {p.name}

@@ -1,11 +1,5 @@
 @import "tailwindcss";
 
-@font-face {
-  font-family: 'Novella';
-  src: url('/src/assets/fonts/Novella-Regular.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
 
 :root {
   --bg: #C8D8E8;

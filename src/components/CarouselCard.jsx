@@ -158,7 +158,7 @@ export default function CarouselCard({
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
                 <span style={{
-                  fontFamily: 'Novella, DM Sans, sans-serif',
+                  fontFamily: 'Fraunces, Georgia, serif',
                   fontSize: 48, fontWeight: 400, lineHeight: 1,
                   color: `${accentColor}22`,
                   letterSpacing: '-0.02em',
@@ -174,7 +174,7 @@ export default function CarouselCard({
         {/* Body */}
         <div style={{ padding: '13px 14px 10px' }}>
           <h3 style={{
-            fontFamily: 'Novella, DM Sans, sans-serif', fontSize: 17, fontWeight: 500,
+            fontFamily: 'Fraunces, Georgia, serif', fontSize: 17, fontWeight: 500,
             color: '#1A1A2A', marginBottom: 5, lineHeight: 1.2,
           }}>
             {project.name}

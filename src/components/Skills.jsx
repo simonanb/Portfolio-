@@ -129,7 +129,7 @@ export default function Skills() {
         >
           <h2
             style={{
-              fontFamily: 'Novella, DM Sans, sans-serif',
+              fontFamily: 'Fraunces, Georgia, serif',
               fontSize: 'clamp(34px, 5vw, 48px)',
               fontWeight: 700,
               color: '#1A1A2A',
@@ -179,7 +179,7 @@ export default function Skills() {
           transition={{ duration: 0.7, delay: 0.5 }}
           style={{
             marginTop: 52,
-            fontFamily: 'Novella, DM Sans, sans-serif',
+            fontFamily: 'Fraunces, Georgia, serif',
             fontSize: 18,
             fontStyle: 'italic',
             fontWeight: 400,

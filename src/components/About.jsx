@@ -110,7 +110,7 @@ export default function About() {
           >
             <h2
               style={{
-                fontFamily: 'Novella, DM Sans, sans-serif',
+                fontFamily: 'Fraunces, Georgia, serif',
                 fontSize: 'clamp(32px, 4.5vw, 48px)',
                 fontWeight: 700,
                 color: '#1A1A2A',
