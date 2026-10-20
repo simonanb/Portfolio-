@@ -128,9 +128,9 @@ export const projects = {
       tags: ['UI Design', 'UX Research', 'Product Design', 'Figma'],
       color: '#4A9EBF',
       category: 'UX Design',
-      image: '/Portfolio-/clearforward-1.png',
+      image: '/Portfolio-/clearforward-clinician.png',
       images: [
-        '/Portfolio-/clearforward-1.png',
+        '/Portfolio-/clearforward-clinician.png',
         '/Portfolio-/clearforward-2.png',
         '/Portfolio-/clearforward-3.png',
         '/Portfolio-/clearforward-4.png',
