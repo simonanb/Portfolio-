@@ -149,6 +149,8 @@ export const projects = {
         '/Portfolio-/clearforward-17.png',
         '/Portfolio-/clearforward-18.png',
         '/Portfolio-/clearforward-19.png',
+        '/Portfolio-/clearforward-mobile-1.png',
+        '/Portfolio-/clearforward-mobile-2.png',
       ],
       fullDesc:
         'A SaaS platform streamlining orthodontic case management with intuitive patient tracking, treatment planning, and clinical workflow tools.',
@@ -232,6 +234,15 @@ export const projects = {
             'Transferring a patient to another practice is a sensitive action, so the transfer modal asks the user to review before confirming: it shows the current and new practice and doctor side by side, lists every case included in the transfer, and explains that the old practice will keep view-only access.',
           ],
           galleryAfter: [[15, 18], [17, 16]],
+        },
+        {
+          title: 'iOS App',
+          paragraphs: [
+            "Doctors are not always at a desk, so I also designed an iOS app that brings the most important parts of the portal to their phone. It opens on a home screen that greets the doctor by name and shows the cases that need their review, cases on hold, and key numbers such as average approval time, with notifications, cases, patients, and the store one tap away in the bottom navigation.",
+            "The core flow lets a doctor review a treatment plan from start to finish on the go: open the case, check the details and the plan summary, watch the treatment plan animation, and then approve it or request changes by picking a reason and adding a comment. Notes keep the conversation with the clinician going from the same screen.",
+            "Phones are also the easiest way to capture clinical photos, so I designed a photo flow around the camera. Doctors can take photos or choose them from their library, review them before saving, and see which required shots are still missing for a case submission. Photos are grouped by date on the patient profile and can be selected and deleted in bulk, while cases always keep their own copies.",
+          ],
+          galleryAfter: [19, 20],
         },
         {
           title: 'Visual Design & Design System',
