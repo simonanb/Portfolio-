@@ -187,7 +187,7 @@ export default function Skills() {
             letterSpacing: '-0.01em',
           }}
         >
-          "In the zone — trees on both sides."
+          "In the zone, trees on both sides."
         </motion.p>
       </div>
     </section>

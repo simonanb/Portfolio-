@@ -3,18 +3,18 @@ import { motion } from 'framer-motion'
 const ENTRIES = [
   {
     title: 'Freelance UI/UX Designer',
-    period: '2023 — present',
-    desc: 'Working with startups and studios on product design — from early discovery to polished interfaces.',
+    period: '2023 to present',
+    desc: 'Working with startups and studios on product design, from early discovery to polished interfaces.',
     tag: 'Ongoing',
   },
   {
     title: 'Ritual Cafe Branding',
     period: '2024',
-    desc: 'Brand identity for an intimate coffee experience in Skopje — wordmark, typography system, and print collateral.',
+    desc: 'Brand identity for an intimate coffee experience in Štip: wordmark, typography system, and print collateral.',
     tag: 'Brand',
   },
   {
-    title: 'Daruvaj.mk — Community Platform',
+    title: 'Daruvaj.mk: Community Platform',
     period: '2025',
     desc: 'End-to-end design for a free donation and item-sharing platform built for Macedonia.',
     tag: 'Product',
@@ -225,7 +225,7 @@ export default function Experience() {
             paddingLeft: 28,
           }}
         >
-          More stops ahead — updating as I ride.
+          More stops ahead. Updating as I ride.
         </motion.p>
       </div>
     </section>

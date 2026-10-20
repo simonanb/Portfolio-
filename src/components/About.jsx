@@ -133,7 +133,7 @@ export default function About() {
               }}
             >
               I'm Simona, a UI/UX designer from Macedonia. I care about
-              making things that feel as good as they look — whether that's
+              making things that feel as good as they look, whether that's
               a digital product, a clay figure, or a clean run down fresh
               powder.
             </p>
@@ -161,6 +161,16 @@ export default function About() {
             >
               Based in Macedonia · Available for freelance
             </p>
+
+            <a
+              className="cv-btn"
+              href={`${import.meta.env.BASE_URL}Simona-CV.pdf`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ marginTop: 24 }}
+            >
+              Download CV ↓
+            </a>
           </motion.div>
 
           {/* ── Right: Interest Cards ── */}

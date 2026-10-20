@@ -26,12 +26,12 @@ export const projects = {
         '/Portfolio-/daruvaj-15.png',
       ],
       fullDesc:
-        'A community-driven platform enabling Macedonians to donate items, share resources, and connect with those in need — completely free of charge.',
+        'A community-driven platform enabling Macedonians to donate items, share resources, and connect with those in need, completely free of charge.',
       sections: [
         {
           title: 'Overview',
           paragraphs: [
-            'Daruvaj.mk (from the Macedonian word "дарувај", meaning "give" or "donate") is a free donation and item-sharing platform built for people in Macedonia, with the interface in Macedonian. It gives anyone a simple way to pass on things they no longer need — clothes, furniture, books, toys, household items — to someone who can use them, without money changing hands.',
+            'Daruvaj.mk (from the Macedonian word "дарувај", meaning "give" or "donate") is a free donation and item-sharing platform built for people in Macedonia, with the interface in Macedonian. It gives anyone a simple way to pass on things they no longer need (clothes, furniture, books, toys, household items) to someone who can use them, without money changing hands.',
             'I worked on the project end to end: from research and information architecture to the interface design and the final build with Next.js and Supabase. The goal was to create a platform that feels trustworthy, local, and effortless, so that giving becomes as easy as posting a photo.',
           ],
         },
@@ -45,8 +45,8 @@ export const projects = {
         {
           title: 'Research & Discovery',
           paragraphs: [
-            'I started by looking at how people currently donate and ask for items — observing local Facebook groups, reviewing classifieds platforms, and talking with people who had both given and received items. I also analysed similar donation and sharing platforms from other countries to understand which patterns work and where they fall short.',
-            'A few clear insights came out of this phase. Donors want the process to be fast and to feel safe — they do not want to share more personal information than necessary. Recipients care most about location and availability, and want to know quickly whether an item is still up for grabs. Both sides value trust, and a platform built specifically for giving (not selling) immediately feels more genuine.',
+            'I started by looking at how people currently donate and ask for items by observing local Facebook groups, reviewing classifieds platforms, and talking with people who had both given and received items. I also analysed similar donation and sharing platforms from other countries to understand which patterns work and where they fall short.',
+            'A few clear insights came out of this phase. Donors want the process to be fast and to feel safe, and they do not want to share more personal information than necessary. Recipients care most about location and availability, and want to know quickly whether an item is still up for grabs. Both sides value trust, and a platform built specifically for giving (not selling) immediately feels more genuine.',
           ],
         },
         {
@@ -59,9 +59,9 @@ export const projects = {
         {
           title: 'Design Process',
           paragraphs: [
-            'I mapped the key user flows first — posting an item, browsing and searching, requesting an item, and managing active listings — and used them to define a lean information architecture. Low-fidelity wireframes helped me explore different layouts for the listing feed and the posting form before moving into visual design.',
+            'I mapped the key user flows first (posting an item, browsing and searching, requesting an item, and managing active listings) and used them to define a lean information architecture. Low-fidelity wireframes helped me explore different layouts for the listing feed and the posting form before moving into visual design.',
             'The posting flow was designed to feel as light as possible: add photos, describe the item and pick a category, then set the location and condition and publish. Browsing focuses on large, image-led cards with clear category and municipality filters, so users can scan quickly and spot what is relevant to them.',
-            'The landing page explains the whole idea in three simple steps — sign up, post or find, connect — and presents the seven item categories (electronics, toys, books, clothes, kitchen appliances, furniture, and other) as large illustrated objects, so visitors understand what they can give away at a glance.',
+            'The landing page explains the whole idea in three simple steps (sign up, post or find, connect) and presents the seven item categories (electronics, toys, books, clothes, kitchen appliances, furniture, and other) as large illustrated objects, so visitors understand what they can give away at a glance.',
             'Throughout the process I tested the prototypes with real users, refining labels, simplifying steps, and adjusting the hierarchy based on where people hesitated or got confused.',
           ],
           galleryAfter: [1],
@@ -70,7 +70,7 @@ export const projects = {
           title: 'Visual Design',
           paragraphs: [
             'The visual language is bold, playful, and warm. A confident palette of deep blue, coral orange, sunny yellow, and soft lilac on a cream background gives the platform an energetic, optimistic personality, far from the cold feel of a typical classifieds site.',
-            'Hand-drawn illustrations of everyday objects — a teddy bear, a t-shirt, a phone, a chair — sit right inside the headline and double as category icons, making the idea of giving things a second life instantly visual. Rough, sketch-like frames around cards and icons add a handmade, community feel.',
+            'Hand-drawn illustrations of everyday objects (a teddy bear, a t-shirt, a phone, a chair) sit right inside the headline and double as category icons, making the idea of giving things a second life instantly visual. Rough, sketch-like frames around cards and icons add a handmade, community feel.',
             'A tall, hand-lettered display typeface gives headlines character, while a clean geometric sans-serif keeps body text readable. Both work in Macedonian Cyrillic, so the platform feels native rather than translated. Strong full-width colour bands and clear orange calls to action guide visitors through the page.',
           ],
           galleryAfter: [2, 3],
@@ -86,7 +86,7 @@ export const projects = {
         {
           title: 'Posting a Donation',
           paragraphs: [
-            'Adding a donation is split into three short steps with a progress bar, so it never feels like filling out a long form. First the donor adds up to five photos, then gives the item a title and short description and picks a category from large illustrated tiles, and finally chooses their municipality and the item\'s condition — Excellent, Good, or Solid — before publishing.',
+            'Adding a donation is split into three short steps with a progress bar, so it never feels like filling out a long form. First the donor adds up to five photos, then gives the item a title and short description and picks a category from large illustrated tiles, and finally chooses their municipality and the item\'s condition (Excellent, Good, or Solid) before publishing.',
           ],
           galleryAfter: [7, 8, 9],
         },
@@ -115,7 +115,7 @@ export const projects = {
           title: 'Outcome',
           paragraphs: [
             'The result is a focused, easy-to-use platform dedicated entirely to giving. Daruvaj.mk replaces scattered posts and endless feeds with a clear, searchable space where donors can list items in minutes and recipients can find what they need nearby.',
-            'The project strengthened my skills across the full product process — from research and UX strategy to interface design and development — and showed me how thoughtful design can make generosity easier and help a community support itself.',
+            'The project strengthened my skills across the full product process, from research and UX strategy to interface design and development, and showed me how thoughtful design can make generosity easier and help a community support itself.',
           ],
           galleryAfter: [4],
         },
@@ -185,7 +185,7 @@ export const projects = {
         {
           title: 'Information Architecture',
           paragraphs: [
-            'I reorganised the navigation into three clear groups. Main holds everyday work — Dashboard, Cases, Patients, Store, and Production. Organization covers Dental groups and Practices. Management gathers the admin tools — Users and Roles, Tiers, Vouchers, Referrals, Templates, Products, and Printers — with Reports and Settings always available at the bottom.',
+            'I reorganised the navigation into three clear groups. Main holds everyday work: Dashboard, Cases, Patients, Store, and Production. Organization covers Dental groups and Practices. Management gathers the admin tools (Users and Roles, Tiers, Vouchers, Referrals, Templates, Products, and Printers), with Reports and Settings always available at the bottom.',
             'The dashboard, shown at the top of this page, greets practitioners by name and puts their work first. The cases waiting for their review sit in the top-left corner, where the eye lands first, followed by cases on hold with how long they have been waiting and which need action. Alongside them, four stat cards track active and new patients, average approval time, and treatments completed this month, while a status bar at the bottom shows how all active cases are distributed. A compact webinar card in the brand blue highlights upcoming education without competing with the clinical work.',
           ],
         },
@@ -200,10 +200,10 @@ export const projects = {
         {
           title: 'Creating a Case',
           paragraphs: [
-            'Every case belongs to a patient, so I designed several ways into case creation depending on where the user is. The main one starts from the patient\'s profile, which shows their full treatment history as a timeline of cards — each with its status, reference, doctor, and last update — and a New case button to start the next case for that patient without searching for them again.',
+            'Every case belongs to a patient, so I designed several ways into case creation depending on where the user is. The main one starts from the patient\'s profile, which shows their full treatment history as a timeline of cards (each with its status, reference, doctor, and last update) and a New case button to start the next case for that patient without searching for them again.',
             'When a new patient is created, a confirmation modal lets the user either open the patient\'s profile or go straight to the case creation form. And from anywhere in the portal, the New case button in the header opens a modal asking whether the case is for an existing patient or a new one; choosing a new patient leads to the new patient form.',
             'Case creation itself is a nine-step guided flow with a persistent stepper, so users always know where they are and what is left. Products are presented as visual cards with clear prices, prescription details use quick toggle buttons instead of long dropdowns, and scans upload with live progress and clear format requirements.',
-            'The prescription chart lets clinicians click any tooth to mark treatments and conditions — such as extractions, crowns, or teeth that should not move — and add notes, turning a detailed clinical task into a direct, visual interaction.',
+            'The prescription chart lets clinicians click any tooth to mark treatments and conditions (such as extractions, crowns, or teeth that should not move) and add notes, turning a detailed clinical task into a direct, visual interaction.',
           ],
           galleryAfter: [10, 4, 3, 5, 6, 7, 8],
         },
@@ -211,7 +211,7 @@ export const projects = {
           title: 'One Place for Every Case',
           paragraphs: [
             'Each case opens with a consistent header showing the patient, tags, reference, dental group, practice, and doctor, followed by tabs for Case details, Clinical details, Treatment plan, Production, and Orders.',
-            'Case details groups information into clear cards — case info with status and complexity, activity, team, and handling — with inline editing and highlighted states such as escalated cases. The header uses the same pattern as the patient profile, so moving between a patient and their cases feels seamless.',
+            'Case details groups information into clear cards (case info with status and complexity, activity, team, and handling) with inline editing and highlighted states such as escalated cases. The header uses the same pattern as the patient profile, so moving between a patient and their cases feels seamless.',
           ],
           galleryAfter: [9],
         },
@@ -228,7 +228,7 @@ export const projects = {
           title: 'Details & Interactions',
           paragraphs: [
             'Much of the everyday work happens in small surfaces, so I gave modals the same care as full pages. The purchase order modal summarises an order at a glance and shows the buyer\'s other purchases without leaving the store.',
-            'The notes thread keeps doctors and clinicians in sync on each case, with a short editing window, status-change entries, attached photos, and visibility controls. When assigning a clinician, each person\'s current workload — treatment plans, refinements, retainers, and modification requests — is shown next to their name, so work can be balanced fairly.',
+            'The notes thread keeps doctors and clinicians in sync on each case, with a short editing window, status-change entries, attached photos, and visibility controls. When assigning a clinician, each person\'s current workload (treatment plans, refinements, retainers, and modification requests) is shown next to their name, so work can be balanced fairly.',
             'Transferring a patient to another practice is a sensitive action, so the transfer modal asks the user to review before confirming: it shows the current and new practice and doctor side by side, lists every case included in the transfer, and explains that the old practice will keep view-only access.',
           ],
           galleryAfter: [[15, 18], [17, 16]],
@@ -237,14 +237,14 @@ export const projects = {
           title: 'Visual Design & Design System',
           paragraphs: [
             'The visual design needed to feel clinical and trustworthy without becoming cold. I used a clean, light interface with a confident blue as the primary colour, warm orange accents from the ClearForward brand, a clear typographic hierarchy, and plenty of white space to keep dense information readable.',
-            'Alongside the redesign I built a new design system in Figma — colours, typography, buttons, inputs, tabs, tables, status badges, cards, modals, and navigation. Consistent status colours and components make large amounts of data easy to scan and make new features faster to design and develop.',
+            'Alongside the redesign I built a new design system in Figma: colours, typography, buttons, inputs, tabs, tables, status badges, cards, modals, and navigation. Consistent status colours and components make large amounts of data easy to scan and make new features faster to design and develop.',
           ],
         },
         {
           title: 'Outcome',
           paragraphs: [
             'The redesigned ClearForward Portal brings the full orthodontic case workflow into a single, structured platform. Users see what needs their attention the moment they log in, every case and patient has one clear home, and admin tools follow the same patterns as the rest of the product.',
-            'The project taught me how to design for expert users in a complex domain — balancing detail with clarity, designing for many roles at once, and building a design system that keeps a large product consistent as it grows.',
+            'The project taught me how to design for expert users in a complex domain: balancing detail with clarity, designing for many roles at once, and building a design system that keeps a large product consistent as it grows.',
           ],
         },
       ],
@@ -350,7 +350,7 @@ export const projects = {
     {
       slug: 'portfolio',
       name: 'This Portfolio',
-      desc: 'Snowball game portfolio — yes, this one',
+      desc: 'Snowball game portfolio. Yes, this one',
       tags: ['Creative Dev', 'GSAP', 'React', 'Vite'],
       color: '#4A9EBF',
       category: 'UX Design',
@@ -376,19 +376,19 @@ export const projects = {
         '/Portfolio-/ritual-6.png',
       ],
       fullDesc:
-        'A complete visual identity system for Ritual Café — a specialty coffee concept built around the idea of slowness, ritual, and sensory presence.',
+        'A complete visual identity system for Ritual Café, a specialty coffee shop in Štip, built around the idea of slowness, ritual, and sensory presence.',
       sections: [
         {
           title: 'Overview',
           paragraphs: [
-            'Ritual Café is a branding project created for a fictional specialty coffee shop built around the idea of slowing down and enjoying everyday rituals. The goal was to design a visual identity that transforms a simple coffee stop into an experience—one that feels warm, welcoming, and memorable.',
+            'Ritual Café is a branding project created for Ritual Café, a real specialty coffee shop in Štip, North Macedonia, built around the idea of slowing down and enjoying everyday rituals. The goal was to design a visual identity that transforms a simple coffee stop into an experience, one that feels warm, welcoming, and memorable.',
             'The identity combines organic shapes, earthy colors, and elegant typography to reflect the calm, comforting atmosphere of the café. Every design decision was made to create a cohesive brand that works consistently across print, social media, and future customer touchpoints.',
           ],
         },
         {
           title: 'The Concept',
           paragraphs: [
-            'Rather than positioning Ritual Café as just another coffee shop, the concept focuses on creating moments of pause in a fast-paced world. Coffee becomes a daily ritual—a small moment to reconnect, relax, and enjoy the present.',
+            'Rather than positioning Ritual Café as just another coffee shop, the concept focuses on creating moments of pause in a fast-paced world. Coffee becomes a daily ritual, a small moment to reconnect, relax, and enjoy the present.',
             'The visual identity draws inspiration from the movement of coffee, natural forms, and handcrafted details. One of the brand\'s defining elements is the custom letter "a" in the logo, which is designed to resemble the gentle steam rising from a freshly brewed cup of coffee. This subtle detail reinforces the idea of warmth, comfort, and ritual while giving the logo a distinctive and memorable character.',
             'Together, the organic shapes, earthy color palette, and expressive typography create a brand that feels approachable, modern, and authentic.',
           ],
@@ -407,7 +407,7 @@ export const projects = {
           title: 'Outcome',
           paragraphs: [
             'The final result is a cohesive brand identity that captures the essence of Ritual Café through thoughtful design and consistent visual storytelling.',
-            'The project demonstrates how a strong visual system can communicate personality, create emotional connection, and provide a solid foundation for future brand growth. Every element works together to transform a simple café concept into a memorable and engaging brand experience.',
+            'The project demonstrates how a strong visual system can communicate personality, create emotional connection, and provide a solid foundation for future brand growth. Every element works together to transform a neighbourhood café into a memorable and engaging brand experience.',
           ],
         },
       ],
@@ -466,7 +466,7 @@ export const projects = {
     {
       slug: 'clay-work',
       name: 'Clay Sculptures',
-      desc: 'Air dry clay modeling — handmade figures and forms',
+      desc: 'Air dry clay modeling: handmade figures and forms',
       tags: ['Handmade', 'Sculpture', 'Air Dry Clay'],
       color: '#C4956A',
       category: 'Clay Work',

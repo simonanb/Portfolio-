@@ -38,7 +38,7 @@ export default function AboutPage() {
           {/* Left: bio + interests */}
           <div>
             <p style={{ fontFamily: 'Inter', fontSize: 15, color: '#5A6A7A', lineHeight: 1.8, marginBottom: 20 }}>
-              I'm Simona — a UI/UX designer, graphic designer, and clay artist. I obsess over
+              I'm Simona, a UI/UX designer, graphic designer, and clay artist. I obsess over
               the intersection of beautiful and usable: interfaces that feel right, brands that
               speak clearly, and objects you want to hold.
             </p>
@@ -93,18 +93,28 @@ export default function AboutPage() {
           }}>
             Let's make something.
           </h2>
-          <a
-            href="mailto:simona.nb@hotmail.com"
-            style={{
-              display: 'inline-block',
-              background: '#4A9EBF', color: 'white',
-              borderRadius: 999, padding: '10px 26px',
-              fontFamily: 'Inter', fontSize: 14, fontWeight: 500,
-              textDecoration: 'none',
-            }}
-          >
-            simona.nb@hotmail.com
-          </a>
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 12 }}>
+            <a
+              href="mailto:simona.nb@hotmail.com"
+              style={{
+                display: 'inline-block',
+                background: '#4A9EBF', color: 'white',
+                borderRadius: 999, padding: '10px 26px',
+                fontFamily: 'Inter', fontSize: 14, fontWeight: 500,
+                textDecoration: 'none',
+              }}
+            >
+              simona.nb@hotmail.com
+            </a>
+            <a
+              className="cv-btn"
+              href={`${import.meta.env.BASE_URL}Simona-CV.pdf`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Download CV ↓
+            </a>
+          </div>
         </div>
 
         <div style={{ textAlign: 'center', marginTop: 52 }}>

@@ -279,3 +279,20 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .rider-carve, .rider-jump, .rider-shadow, .spray-puff { animation: none; }
 }
+
+.cv-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid #4A9EBF;
+  color: #4A9EBF;
+  border-radius: 999px;
+  padding: 10px 24px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+.cv-btn:hover { background: #4A9EBF; color: white; }

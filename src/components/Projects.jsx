@@ -6,19 +6,19 @@ import { motion } from 'framer-motion'
 const PROJECTS = [
   {
     title: 'Daruvaj.mk',
-    desc: 'A free donation & item-sharing platform for Macedonia — designed to make giving as frictionless as possible.',
+    desc: 'A free donation & item-sharing platform for Macedonia, designed to make giving as frictionless as possible.',
     tags: ['UI Design', 'Next.js', 'Supabase'],
     image: '/Portfolio-/daruvaj-1.png',
   },
   {
     title: 'Ritual',
-    desc: 'Cafe branding for an intimate coffee experience in Skopje — warmth, ritual, and typographic personality.',
+    desc: 'Cafe branding for an intimate coffee experience in Štip: warmth, ritual, and typographic personality.',
     tags: ['Brand Identity', 'Typography', 'Print'],
     image: '/Portfolio-/ritual-1.png',
   },
   {
     title: 'Portfolio',
-    desc: 'Scroll-driven storytelling meets personal identity — this site.',
+    desc: 'Scroll-driven storytelling meets personal identity. This site.',
     tags: ['Creative Dev', 'GSAP', 'React'],
   },
 ]

@@ -570,7 +570,7 @@ export default function Home() {
         }}>
           {ammoUsed < AMMO
             ? `${AMMO - ammoUsed} snowball${AMMO - ammoUsed !== 1 ? 's' : ''} left`
-            : 'No snowballs left — reload to play again'}
+            : 'No snowballs left. Reload to play again'}
         </span>
         {ammoUsed < AMMO && (
           <span style={{
