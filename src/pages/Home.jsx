@@ -592,7 +592,7 @@ export default function Home() {
             color: 'rgba(26,42,58,0.36)', letterSpacing: '0.04em',
             marginTop: 4,
           }}>
-            click anywhere to throw · aim for the signs
+            click anywhere to throw · aim for the signs (or me, I dare you)
           </span>
         )}
       </div>
