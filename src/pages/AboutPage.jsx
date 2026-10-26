@@ -57,9 +57,9 @@ export default function AboutPage() {
               speak clearly, and objects you want to hold.
             </p>
             <p style={{ fontFamily: 'Inter', fontSize: 15, color: '#5A6A7A', lineHeight: 1.8, marginBottom: 32 }}>
-              When I'm not designing on a screen, I'm shaping things with my hands or finding
-              steep slopes to point skis down. I believe the same attention you give to a
-              well-considered layout belongs in everything you make.
+              When I'm not designing on a screen, I'm sculpting small figures out of air dry
+              clay or snowboarding down the nearest mountain. I believe the same attention you
+              give to a well-considered layout belongs in everything you make.
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
