@@ -124,7 +124,7 @@ export default function Home() {
     return () => { scene.removeEventListener('mousemove', onMove); cancelAnimationFrame(raf) }
   }, [isMobile])
 
-  /* ── Throw hint: dashed arc to the UX sign until the first throw ── */
+  /* ── Throw hint: tap ripple on the UX sign until the first throw ── */
   useEffect(() => {
     if (!introDone || ammoUsed > 0) { setHint(null); return }
     const place = () => {
@@ -424,17 +424,16 @@ export default function Home() {
           height={hint.h}
           style={{ position: 'absolute', inset: 0, zIndex: 19, pointerEvents: 'none', animation: 'fadein 0.5s ease both' }}
         >
-          <path
-            className="hint-arc"
-            d={`M ${hint.x1} ${hint.y1} Q ${(hint.x1 + hint.x2) / 2} ${Math.min(hint.y1, hint.y2) - (isMobile ? 60 : 110)} ${hint.x2} ${hint.y2}`}
-            fill="none" stroke="#2A4A5A" strokeOpacity="0.45" strokeWidth="2"
-            strokeDasharray="6 8" strokeLinecap="round"
-          />
-          <circle
-            cx={hint.x2} cy={hint.y2} r="7" fill="#4A9EBF"
-            style={{ transformOrigin: `${hint.x2}px ${hint.y2}px`, animation: 'hintPulse 1.4s ease-in-out infinite' }}
-          />
-          <circle cx={hint.x1} cy={hint.y1} r="6" fill="white" stroke="#CCDDE8" />
+          {/* Tap ripple on the sign: reads as "click here", not "drag from here" */}
+          {[0, 0.7].map(delay => (
+            <circle
+              key={delay}
+              className="hint-arc"
+              cx={hint.x2} cy={hint.y2} r="9" fill="none" stroke="#4A9EBF" strokeWidth="2"
+              style={{ transformOrigin: `${hint.x2}px ${hint.y2}px`, animation: `hintRipple 1.4s ease-out ${delay}s infinite` }}
+            />
+          ))}
+          <circle cx={hint.x2} cy={hint.y2} r="5" fill="#4A9EBF" />
         </svg>
       )}
       {hint && (
@@ -442,14 +441,14 @@ export default function Home() {
           aria-hidden="true"
           style={{
             position: 'absolute', zIndex: 21, pointerEvents: 'none',
-            left: hint.x1, top: hint.y1 - (isMobile ? 46 : 52),
+            left: Math.min(Math.max(hint.x2, 120), hint.w - 120), top: hint.y2 + 22,
             transform: 'translateX(-50%)', whiteSpace: 'nowrap',
             background: '#2A4A5A', color: 'white', borderRadius: 999, padding: '6px 12px',
             fontFamily: 'Inter, sans-serif', fontSize: 11, fontWeight: 600,
             boxShadow: '0 4px 14px rgba(42,74,90,0.25)', animation: 'fadein 0.5s ease both',
           }}
         >
-          Click a sign to throw a snowball ❄️
+          {isMobile ? 'Tap' : 'Click'} a sign to throw a snowball ❄️
         </div>
       )}
 
