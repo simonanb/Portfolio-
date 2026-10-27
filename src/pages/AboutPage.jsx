@@ -52,9 +52,9 @@ export default function AboutPage() {
           {/* Left: bio + interests */}
           <div>
             <p style={{ fontFamily: 'Inter', fontSize: 15, color: '#5A6A7A', lineHeight: 1.8, marginBottom: 20 }}>
-              I'm Simona, a UX/UI designer with 6+ years across agency and B2B SaaS. I own
-              the full design process, from research to handoff, and I love turning complex
-              workflows into clear interfaces and building design systems that help products grow.
+              I'm Simona, a UX/UI designer who loves making things simple. I enjoy taking
+              something messy or confusing and shaping it into an experience that feels easy,
+              clear and good to use.
             </p>
             <p style={{ fontFamily: 'Inter', fontSize: 15, color: '#5A6A7A', lineHeight: 1.8, marginBottom: 32 }}>
               When I'm not designing on a screen, I'm sculpting small figures out of air dry
