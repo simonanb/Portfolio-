@@ -1,13 +1,13 @@
 import { useGoBack } from '../hooks/useGoBack'
 
 const SKILLS = [
-  'Figma', 'UI Design', 'UX Research', 'Prototyping',
-  'Branding', 'Graphic Design', 'Adobe Photoshop', 'Adobe InDesign', 'Adobe Illustrator', 'Claude', 'Figma AI',
+  'Figma', 'UI Design', 'UX Research', 'User Flows', 'Prototyping', 'Design Systems',
+  'Branding', 'Graphic Design', 'Adobe Photoshop', 'Adobe InDesign', 'Adobe Illustrator', 'Claude', 'ChatGPT', 'Figma AI',
 ]
 
 const INTERESTS = [
   { emoji: '🏔', label: 'Snowboarding',  desc: 'Found on slopes when not on screens.' },
-  { emoji: '💻', label: 'UI/UX Design',  desc: 'Obsessed with beautiful, usable interfaces.' },
+  { emoji: '💻', label: 'UX/UI Design',  desc: 'Obsessed with beautiful, usable interfaces.' },
 ]
 
 export default function AboutPage() {
@@ -52,9 +52,9 @@ export default function AboutPage() {
           {/* Left: bio + interests */}
           <div>
             <p style={{ fontFamily: 'Inter', fontSize: 15, color: '#5A6A7A', lineHeight: 1.8, marginBottom: 20 }}>
-              I'm Simona, a UI/UX designer, graphic designer, and clay artist. I obsess over
-              the intersection of beautiful and usable: interfaces that feel right, brands that
-              speak clearly, and objects you want to hold.
+              I'm Simona, a UX/UI designer with 6+ years across agency and B2B SaaS. I own
+              the full design process, from research to handoff, and I love turning complex
+              workflows into clear interfaces and building design systems that help products grow.
             </p>
             <p style={{ fontFamily: 'Inter', fontSize: 15, color: '#5A6A7A', lineHeight: 1.8, marginBottom: 32 }}>
               When I'm not designing on a screen, I'm sculpting small figures out of air dry

@@ -480,7 +480,7 @@ export default function Home() {
           color: '#4A9EBF', letterSpacing: '0.12em',
           textTransform: 'uppercase', marginTop: 6, fontWeight: 500,
         }}>
-          UI/UX Designer · Graphic Designer
+          UX/UI Designer
         </p>
         <p style={{
           fontFamily: 'Inter, sans-serif', fontSize: 11,
