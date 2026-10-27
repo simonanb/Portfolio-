@@ -171,17 +171,20 @@ export default function CarouselCard({
           )}
         </div>
 
-        {/* Body */}
-        <div style={{ padding: '13px 14px 10px' }}>
+        {/* Body: fixed height so the arrows stay in the same place on every project */}
+        <div style={{ padding: '13px 14px 10px', height: 132, boxSizing: 'border-box', overflow: 'hidden' }}>
           <h3 style={{
             fontFamily: 'Fraunces, Georgia, serif', fontSize: 17, fontWeight: 500,
             color: '#1A1A2A', marginBottom: 5, lineHeight: 1.2,
+            whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
           }}>
             {project.name}
           </h3>
           <p style={{
             fontFamily: 'Inter, sans-serif', fontSize: 11,
             color: '#7A8A9A', marginBottom: 10, lineHeight: 1.6,
+            height: 35, overflow: 'hidden',
+            display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
           }}>
             {project.desc}
           </p>
