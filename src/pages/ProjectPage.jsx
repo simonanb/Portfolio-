@@ -149,6 +149,17 @@ export default function ProjectPage() {
               <span key={t} className="tag-pill" style={{ fontSize: 10, padding: '4px 12px' }}>{t}</span>
             ))}
           </div>
+          {project.link && (
+            <a
+              className="cv-btn"
+              href={project.link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ marginTop: 24 }}
+            >
+              {project.link.label} ↗
+            </a>
+          )}
         </div>
 
         {/* ── Hero image above sections ── */}

@@ -378,6 +378,7 @@ export const projects = {
       name: 'Identity',
       desc: 'Website for a creative agency from Skopje',
       tags: ['Web Design', 'UI Design', 'Figma'],
+      link: { url: 'https://id.com.mk/', label: 'Visit id.com.mk' },
       color: '#4A9EBF',
       category: 'UX Design',
       image: '/Portfolio-/identity-1.png',
