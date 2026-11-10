@@ -287,6 +287,9 @@ export const projects = {
         '/Portfolio-/my-closet-14.png',
         '/Portfolio-/my-closet-15.png',
         '/Portfolio-/my-closet-16.png',
+        '/Portfolio-/my-closet-17.png',
+        '/Portfolio-/my-closet-18.png',
+        '/Portfolio-/my-closet-19.png',
       ],
       fullDesc:
         'A wardrobe app for adding your clothes in seconds, building outfits, recreating looks from inspiration photos and getting outfit ideas for today’s weather.',
@@ -344,6 +347,15 @@ export const projects = {
             'The AI stylist answers the everyday question of what to wear. It suggests three outfits from the user’s own closet, taking today’s weather and past Looks into account, with a single Style me button and extra filters folded away for when they are needed.',
           ],
           galleryAfter: [9, 7, 8],
+        },
+        {
+          title: 'Planning Outfits for Work & Trips',
+          paragraphs: [
+            'Plans help with the days ahead. A third tab in My Outfits lets the user plan outfits for a work week, a vacation or a trip, with quick options such as Beach, City, Mountains and Countryside. They only pick the dates, and the name is optional, so starting a plan takes a few seconds.',
+            'Each plan opens as a row of colorful day cards, one for every date, with today clearly marked. Each day gets its own outfit, and an evening outfit can be added with a single Night button for dinners or nights out. Plans can be edited or deleted at any time, and the overview shows how many days are already planned.',
+            'For trips and vacations, the app also gives a summary of all the clothes needed for the whole plan, so nothing is forgotten. Pieces can be marked as already packed, turning the summary into a packing checklist for the suitcase.',
+          ],
+          galleryAfter: [16, 17, 18],
         },
         {
           title: 'Iterating With Real Use',
