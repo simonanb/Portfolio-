@@ -290,6 +290,7 @@ export const projects = {
         '/Portfolio-/my-closet-17.png',
         '/Portfolio-/my-closet-18.png',
         '/Portfolio-/my-closet-19.png',
+        '/Portfolio-/my-closet-20.png',
       ],
       fullDesc:
         'A wardrobe app for adding your clothes in seconds, building outfits, recreating looks from inspiration photos and getting outfit ideas for today’s weather.',
@@ -353,9 +354,9 @@ export const projects = {
           paragraphs: [
             'Plans help with the days ahead. A third tab in My Outfits lets the user plan outfits for a work week, a vacation or a trip, with quick options such as Beach, City, Mountains and Countryside. They only pick the dates, and the name is optional, so starting a plan takes a few seconds.',
             'Each plan opens as a row of colorful day cards, one for every date, with today clearly marked. Each day gets its own outfit, and an evening outfit can be added with a single Night button for dinners or nights out. Plans can be edited or deleted at any time, and the overview shows how many days are already planned.',
-            'For trips and vacations, the app also gives a summary of all the clothes needed for the whole plan, so nothing is forgotten. Pieces can be marked as already packed, turning the summary into a packing checklist for the suitcase.',
+            'Below the days, a Pack section gathers every piece needed for the whole plan, so nothing is forgotten. Pieces worn more than once show a small count, and tapping one moves it from To pack to In the bag, while a progress bar shows how much is already in the suitcase. Unpack all resets the list for the next trip.',
           ],
-          galleryAfter: [16, 17, 18],
+          galleryAfter: [16, 17, 18, 19],
         },
         {
           title: 'Iterating With Real Use',
