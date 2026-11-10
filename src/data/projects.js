@@ -373,6 +373,73 @@ export const projects = {
         },
       ],
     },
+    {
+      slug: 'identity',
+      name: 'Identity',
+      desc: 'Website for a creative agency from Skopje',
+      tags: ['Web Design', 'UI Design', 'Figma'],
+      color: '#4A9EBF',
+      category: 'UX Design',
+      image: '/Portfolio-/identity-1.png',
+      images: [
+        '/Portfolio-/identity-1.png',
+        '/Portfolio-/identity-2.png',
+        '/Portfolio-/identity-3.png',
+        '/Portfolio-/identity-4.png',
+        '/Portfolio-/identity-5.png',
+        '/Portfolio-/identity-6.png',
+      ],
+      fullDesc:
+        'A bold, playful one-page website for Identity, an interdisciplinary creative studio from Skopje, designed to feel as confident and witty as the agency itself.',
+      sections: [
+        {
+          title: 'Overview',
+          paragraphs: [
+            'Identity is a creative studio from Skopje, Macedonia, working across strategy, design, development, video, digital communication, brand identity, and events. They needed a website that would introduce the team, explain what they do, and show their work to potential clients.',
+            'I designed the website in Figma, from the structure of the page to the visual direction and every section of the layout. The site is now live at id.com.mk.',
+          ],
+        },
+        {
+          title: 'The Concept',
+          paragraphs: [
+            'Agency websites often look alike: clean, safe, and easy to forget. Identity wanted the opposite, so the concept grew from their own line, "In a black and white world, we add some red color." The whole site is built on just three colours, a strong red, black, and white, which makes every section instantly recognisable.',
+            'To give the page personality, I combined classic Renaissance art with internet culture. Hands from a famous fresco pass a pair of pixel sunglasses, a cherub leans over the project list, and a classical portrait sits next to the contact form. These unexpected details match the agency\'s humour and make the site memorable.',
+          ],
+          galleryAfter: [1],
+        },
+        {
+          title: 'Structure',
+          paragraphs: [
+            'The website is a single scrolling page that tells the agency\'s story in a clear order: about us, services, our work, clients, blog, and contact. The navigation jumps straight to each section, so visitors can scan the whole agency in one go or go directly to what they need.',
+            'Instead of a long list of service descriptions, the services section shows nine narrow vertical columns, one for each service, next to a short, self-aware intro: "Are you tired of reading service descriptions from numerous agencies that claim to be unique?" The layout is compact, visual, and very different from a typical services grid.',
+          ],
+          galleryAfter: [2],
+        },
+        {
+          title: 'Showing the Work',
+          paragraphs: [
+            'Latest projects are presented as large, bold titles stacked one under another, so each campaign reads almost like a headline. Each title leads to a case study page that follows the same structure (context, idea, campaign, and results), which keeps different projects easy to compare.',
+            'Below the projects, running text strips with lines like "URGENT PLS PLS PLS" bring in the everyday reality of agency life with a wink, adding movement to the page.',
+          ],
+          galleryAfter: [3],
+        },
+        {
+          title: 'Clients & Contact',
+          paragraphs: [
+            'The clients section builds trust with the most important brands shown in a grid, each with a short description of who they are, followed by a compact wall of more logos. Placing it on black makes the logos stand out and gives the page a calm pause between the red sections.',
+            'The page ends with a playful call to action and a simple contact block: email, phone, address with a map link, and a short form with just name, email, and message.',
+          ],
+          galleryAfter: [4, 5],
+        },
+        {
+          title: 'Outcome',
+          paragraphs: [
+            'The final website gives Identity a distinctive online presence that reflects how they work: creative, direct, and not too serious about themselves. A limited colour palette, bold typography, and a few well-placed surprises keep the page consistent while still feeling fun to scroll.',
+            'The project showed me how much a website\'s tone of voice and visual concept can communicate before a visitor reads a single service description.',
+          ],
+        },
+      ],
+    },
   ],
   graphic: [
     {
