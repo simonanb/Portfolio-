@@ -160,16 +160,6 @@ export default function About() {
             >
               Based in Macedonia · Available for freelance
             </p>
-
-            <a
-              className="cv-btn"
-              href={`${import.meta.env.BASE_URL}Simona-CV.pdf?v=${__BUILD_TIME__}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ marginTop: 24 }}
-            >
-              Download CV ↓
-            </a>
           </motion.div>
 
           {/* ── Right: Interest Cards ── */}

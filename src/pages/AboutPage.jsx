@@ -30,15 +30,7 @@ export default function AboutPage() {
 
         {/* Quick actions */}
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 44 }}>
-          <a
-            className="cta-btn"
-            href={`${import.meta.env.BASE_URL}Simona-CV.pdf?v=${__BUILD_TIME__}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Download CV ↓
-          </a>
-          <a className="cv-btn" href="mailto:simona.nb@hotmail.com">
+          <a className="cta-btn" href="mailto:simona.nb@hotmail.com">
             Get in touch
           </a>
         </div>
